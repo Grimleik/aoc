@@ -1,0 +1,49 @@
+# Build directories
+/build/
+/out/
+/bin/
+/lib/
+/CMakeFiles/
+/CMakeCache.txt
+/cmake_install.cmake
+/Makefile
+
+# Visual Studio Code
+.vscode/
+
+# CLion
+.idea/
+cmake-build-*/
+
+# Compilation database
+compile_commands.json
+
+# Object files, binaries, libraries
+*.o
+*.obj
+*.lo
+*.a
+*.lib
+*.so
+*.dll
+*.dylib
+*.exe
+*.out
+
+# Backup and temporary files
+*~
+*.swp
+*.bak
+*.tmp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs and databases
+*.log
+
+# Unit test/build coverage
+*.gcda
+*.gcno
+*.gcov
