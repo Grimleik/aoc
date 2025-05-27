@@ -1,0 +1,3 @@
+/home/patrikfj/repos/aoc/2015/d2/build/CMakeFiles/d2.dir
+/home/patrikfj/repos/aoc/2015/d2/build/CMakeFiles/edit_cache.dir
+/home/patrikfj/repos/aoc/2015/d2/build/CMakeFiles/rebuild_cache.dir
