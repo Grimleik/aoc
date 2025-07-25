@@ -3,60 +3,17 @@
 #include <chrono>
 #include <climits>
 #include <iomanip>
-#include <iostream>
 #include <map>
 // #include <openssl/md5.h>
 #include <ratio>
 #include <set>
 #include <utility>
 #include <vector>
-#include <fstream>
-
-typedef uint8_t u8;
-typedef uint32_t u32;
-
-#define ARRAY_COUNT(x) ((sizeof(x)) / (sizeof(x[0])))
-
-#define CHECK_VALUE(x, y)                                                      \
-	do                                                                         \
-	{                                                                          \
-		if (x != y)                                                            \
-		{                                                                      \
-			std::cout << "Value is: " << x << " expected: " << y << std::endl; \
-			assert(false);                                                     \
-		}                                                                      \
-	} while (false);
-
-inline void save_bmp(const char *filename, int width, int height, u32 *buffer)
-{
-	int filesize = 54 + width * 4 * height;
-	u8 bmpheader[14] = {
-		'B', 'M', filesize, filesize >> 8, filesize >> 16, filesize >> 24,
-		0, 0, 0, 0, 54, 0, 0, 0};
-
-	u8 bmpinfoheader[40] = {
-		40, 0, 0, 0,
-		width, width >> 8, width >> 16, width >> 24,
-		height, height >> 8, height >> 16, height >> 24,
-		1, 0, 32, 0};
-
-	std::ofstream out(filename, std::ios::binary);
-	out.write((char *)bmpheader, ARRAY_COUNT(bmpheader));
-	out.write((char *)bmpinfoheader, ARRAY_COUNT(bmpinfoheader));
-
-	for (int y = height - 1; y >= 0; --y)
-	{
-		for (int x = 0; x < width; ++x)
-		{
-			u32 color = buffer[(y * width + x)];
-			char A = /*color >> 24*/ 127, R = (color >> 16) & 255, G = (color >> 8) & 255, B = (color) & 255;
-			out.write(&B, 1);
-			out.write(&G, 1);
-			out.write(&R, 1);
-			out.write(&A, 1);
-		}
-	}
-}
+#include <functional>
+#include "utils.h"
+#include "d7.cpp"
+#include "d8.cpp"
+#include "d9.cpp"
 
 const char *d3_paths[] = {
 	">", "^>v<", "^v^v^v^v^v",
@@ -223,7 +180,7 @@ int d3p1_house_delivery(const char *path, const int nrActors)
 	//   for (auto kvp : visit) {
 	//     result += (kvp.second & 0x10) + (kvp.second & 0x1);
 	//   }
-	return visit.size();
+	return (int)(visit.size());
 }
 
 // TODO: Implement MD5 instead ?
@@ -1236,9 +1193,19 @@ void d6_lights(const char **input, const int len)
 	delete pixels;
 }
 
-int main(int, char **)
+int main(int argc, char **argv)
 {
-	int puzzleId = 6;
+	std::map<int, std::function<void()>> puzzles = {
+		// { 8, d8 },
+		{ 9, d9 }
+	};
+	for(auto &[k, v] : puzzles) {
+		v();
+	}
+	// puzzles[8]();
+	// puzzles[9]();
+	/*
+	int puzzleId = 8;
 	switch (puzzleId)
 	{
 	case 3:
@@ -1292,10 +1259,25 @@ int main(int, char **)
 		d6_lights(d6_input, ARRAY_COUNT(d6_input));
 	}
 	break;
+	case 7:
+	{
+		d7(argc, argv);
+	}
+	break;
+
+	case 8:
+	{
+		d8();
+	}
+	break;
+
+	case 9:
+	{
+	}break;
 	default:
 		std::cout << "Failure in finding puzzleID: " << puzzleId << std::endl;
 		break;
 	}
-
+	*/
 	return 0;
 }
