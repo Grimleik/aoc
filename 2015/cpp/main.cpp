@@ -11,9 +11,12 @@
 #include <vector>
 #include <functional>
 #include "utils.h"
+#include "string.h"
 #include "d7.cpp"
 #include "d8.cpp"
 #include "d9.cpp"
+#include "d10.cpp"
+#include "d11.cpp"
 
 const char *d3_paths[] = {
 	">", "^>v<", "^v^v^v^v^v",
@@ -1197,9 +1200,11 @@ int main(int argc, char **argv)
 {
 	std::map<int, std::function<void()>> puzzles = {
 		// { 8, d8 },
-		{ 9, d9 }
-	};
-	for(auto &[k, v] : puzzles) {
+		// {9, d9},
+		// {10, d10},
+		{11, d11}};
+	for (auto &[k, v] : puzzles)
+	{
 		v();
 	}
 	// puzzles[8]();

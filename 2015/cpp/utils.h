@@ -50,7 +50,6 @@ bool is_hexadecimal(const char *in)
 		   in[3] != '\0';
 }
 
-
 inline void save_bmp(const char *filename, int width, int height, u32 *buffer)
 {
 	int filesize = 54 + width * 4 * height;
@@ -84,52 +83,69 @@ inline void save_bmp(const char *filename, int width, int height, u32 *buffer)
 
 bool is_whitespace(const char c)
 {
-    return c == ' ' || c == '\n' || c == '\t';
+	return c == ' ' || c == '\n' || c == '\t';
 }
 
 bool is_numeric(const char c)
 {
-    int result = (c - '0');
-    return result >= 0 && result <= 9;
+	int result = (c - '0');
+	return result >= 0 && result <= 9;
 }
 
 int get_number(const char **c)
 {
-    int result = 0;
-    while (!is_numeric(**c))
-        (*c)++;
+	int result = 0;
+	while (!is_numeric(**c))
+		(*c)++;
 
-    while (**c >= '0' && **c <= '9')
-    {
-        result = result * 10 + (int)(**c - '0');
-        ++*c;
-    }
-    return result;
+	while (**c >= '0' && **c <= '9')
+	{
+		result = result * 10 + (int)(**c - '0');
+		++*c;
+	}
+	return result;
 }
 
 char get_symbol(const char **c)
 {
-    while (is_whitespace(**c) || is_numeric(**c))
-        (*c)++;
-    return **c;
+	while (is_whitespace(**c) || is_numeric(**c))
+		(*c)++;
+	return **c;
 }
 
 char is_alpha(const char c)
 {
-    return (((c) >= 'a' && (c) <= 'z') || ((c) >= 'A' && (c) <= 'Z'));
+	return (((c) >= 'a' && (c) <= 'z') || ((c) >= 'A' && (c) <= 'Z'));
 }
 
 std::string get_variable(const char **c)
 {
-    std::string result;
-    while (is_whitespace(**c) || is_numeric(**c) || !is_alpha((**c)))
-        (*c)++;
-    while (is_alpha(**c))
-    {
-        result += **c;
-        (*c)++;
-    }
-    return result;
+	std::string result;
+	while (is_whitespace(**c) || is_numeric(**c) || !is_alpha((**c)))
+		(*c)++;
+	while (is_alpha(**c))
+	{
+		result += **c;
+		(*c)++;
+	}
+	return result;
+}
+
+#include <iostream>
+#include <vector>
+
+template <typename T>
+std::ostream &operator<<(std::ostream &os, const std::vector<T> &vec)
+{
+	os << "[";
+	for (size_t i = 0; i < vec.size(); ++i)
+	{
+		os << vec[i];
+		if (i != vec.size() - 1)
+			os << ", ";
+	}
+	os << "]";
+	return os;
 }
 
 #endif

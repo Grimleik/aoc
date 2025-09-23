@@ -41,7 +41,8 @@ node_t *find_node(std::map<std::string, node_t *> &nodes, std::string name)
 void d9()
 {
 	// file_contents fc = read_entire_file("../../2015/d9_input_test.in");
-	file_contents fc = read_entire_file("../../2015/d9_input.in");
+	// file_contents fc = read_entire_file("../../2015/d9_input.in");
+	file_contents fc = read_entire_file("../2015/d9_input.in");
 	const char *fc_tmp = fc.mem;
 	std::map<std::string, node_t *> nodes;
 	std::vector<link_t *> links;
@@ -106,7 +107,6 @@ void d9()
 			}
 		}
 	}
-
 
 	for (auto &l : links)
 	{

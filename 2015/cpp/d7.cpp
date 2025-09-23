@@ -1,12 +1,13 @@
 /*
-* In the future come back here and do a correct parsing pass.
-*/
+ * In the future come back here and do a correct parsing pass.
+ */
 #include <iostream>
 #include <map>
 #include <vector>
 #include <assert.h>
 #include <string>
 #include <optional>
+#include "utils.h"
 
 // SIGNAL, AND, L/RSHIFT, NOT
 
@@ -362,7 +363,6 @@ const char *instruction_set[] = {
     "NOT xy -> h",
     "NOT yx -> i"};
 
-
 enum instruction_type
 {
     IT_ERROR,
@@ -594,7 +594,7 @@ void execute_program(std::vector<instruction> instructions, std::map<std::string
 int d7(int, char **)
 {
     int i = 0;
-    int len = _countof(input);
+    int len = ARRAY_COUNT(input);
     std::vector<instruction> instructions(len);
     // TODO: Proper parsing, lexing then program construction.
     while (i < len)
