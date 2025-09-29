@@ -1,17 +1,17 @@
 /*
  * In the future come back here and do a correct parsing pass.
  */
+#include "utils.h"
+#include <assert.h>
 #include <iostream>
 #include <map>
-#include <vector>
-#include <assert.h>
-#include <string>
 #include <optional>
-#include "utils.h"
+#include <string>
+#include <vector>
 
 // SIGNAL, AND, L/RSHIFT, NOT
 
-static const char *input[] = {
+static const char *d7_input[] = {
     "lf AND lq -> ls",
     "iu RSHIFT 1 -> jn",
     "bo OR bu -> bv",
@@ -354,338 +354,273 @@ static const char *input[] = {
 };
 
 const char *instruction_set[] = {
-    "123 -> xy",
-    "456 -> yx",
-    "xy AND yx -> d",
-    "xy OR yx -> e",
-    "xy LSHIFT 2 -> f",
-    "yx RSHIFT 2 -> g",
-    "NOT xy -> h",
-    "NOT yx -> i"};
+    "123 -> xy",        "456 -> yx",        "xy AND yx -> d", "xy OR yx -> e",
+    "xy LSHIFT 2 -> f", "yx RSHIFT 2 -> g", "NOT xy -> h",    "NOT yx -> i"};
 
-enum instruction_type
-{
-    IT_ERROR,
-    IT_SIGNAL,
-    IT_AND,
-    IT_OR,
-    IT_LSHIFT,
-    IT_RSHIFT,
-    IT_NOT,
+enum instruction_type {
+  IT_ERROR,
+  IT_SIGNAL,
+  IT_AND,
+  IT_OR,
+  IT_LSHIFT,
+  IT_RSHIFT,
+  IT_NOT,
 };
 
-struct operand
-{
-    int literal = -1;
-    std::string var;
+struct operand {
+  int literal = -1;
+  std::string var;
 
-    std::string print()
-    {
-        if (var.size() > 0)
-            return var;
-        return std::to_string(literal);
-    }
+  std::string print() {
+    if (var.size() > 0)
+      return var;
+    return std::to_string(literal);
+  }
 
-    int evaluate(std::map<std::string, unsigned short> &memory)
-    {
-        if (var.size() <= 0)
-        {
-            return literal;
-        }
-        return memory.find(var) != memory.end() ? memory[var] : -1;
+  int evaluate(std::map<std::string, unsigned short> &memory) {
+    if (var.size() <= 0) {
+      return literal;
     }
+    return memory.find(var) != memory.end() ? memory[var] : -1;
+  }
 };
 
-struct instruction
-{
-    instruction_type it;
-    operand op1, op2, op3;
+struct instruction {
+  instruction_type it;
+  operand op1, op2, op3;
 
-    void print();
-    void execute(std::map<std::string, unsigned short> &memory);
-    bool can_execute(std::map<std::string, unsigned short> &memory);
+  void print();
+  void execute(std::map<std::string, unsigned short> &memory);
+  bool can_execute(std::map<std::string, unsigned short> &memory);
 };
 
 // binary/tertiary ops ?
-void instruction::print()
-{
-    switch (it)
-    {
-    case IT_AND:
-        std::cout << op1.print() << " AND " << op2.print() << " -> " << op3.var << std::endl;
-        break;
-    case IT_OR:
-        std::cout << op1.print() << " OR " << op2.print() << " -> " << op3.var << std::endl;
-        break;
-    case IT_SIGNAL:
-        std::cout << op1.print() << " -> " << op2.print() << std::endl;
-        break;
-    case IT_LSHIFT:
-        std::cout << op1.print() << " LSHIFT " << op2.print() << " -> " << op3.var << std::endl;
-        break;
-    case IT_RSHIFT:
-        std::cout << op1.print() << " RSHIFT " << op2.print() << " -> " << op3.var << std::endl;
-        break;
-    case IT_NOT:
-        std::cout << "NOT " << op1.print() << " -> " << op2.var << std::endl;
-        break;
-    default:
-        std::cerr << "Unknown instruction." << std::endl;
-        break;
-    }
+void instruction::print() {
+  switch (it) {
+  case IT_AND:
+    std::cout << op1.print() << " AND " << op2.print() << " -> " << op3.var
+              << std::endl;
+    break;
+  case IT_OR:
+    std::cout << op1.print() << " OR " << op2.print() << " -> " << op3.var
+              << std::endl;
+    break;
+  case IT_SIGNAL:
+    std::cout << op1.print() << " -> " << op2.print() << std::endl;
+    break;
+  case IT_LSHIFT:
+    std::cout << op1.print() << " LSHIFT " << op2.print() << " -> " << op3.var
+              << std::endl;
+    break;
+  case IT_RSHIFT:
+    std::cout << op1.print() << " RSHIFT " << op2.print() << " -> " << op3.var
+              << std::endl;
+    break;
+  case IT_NOT:
+    std::cout << "NOT " << op1.print() << " -> " << op2.var << std::endl;
+    break;
+  default:
+    std::cerr << "Unknown instruction." << std::endl;
+    break;
+  }
 }
 
-void instruction::execute(std::map<std::string, unsigned short> &memory)
-{
-    switch (it)
-    {
-    case IT_AND:
-    {
-        // TODO: Fix this instruction so it can execute with literals.
-        int lop = op1.evaluate(memory);
-        int rop = op2.evaluate(memory);
-        if (lop != -1 && rop != -1)
-        {
-            memory[op3.var] = lop & rop;
-            // std::cout << op3.var << " : " << memory[op3.var] << std::endl;
-        }
-        else
-        {
-            std::cout << "Gate missing value, not executed: " << lop << " " << rop << std::endl;
-        }
+void instruction::execute(std::map<std::string, unsigned short> &memory) {
+  switch (it) {
+  case IT_AND: {
+    // TODO: Fix this instruction so it can execute with literals.
+    int lop = op1.evaluate(memory);
+    int rop = op2.evaluate(memory);
+    if (lop != -1 && rop != -1) {
+      memory[op3.var] = lop & rop;
+      // std::cout << op3.var << " : " << memory[op3.var] << std::endl;
+    } else {
+      std::cout << "Gate missing value, not executed: " << lop << " " << rop
+                << std::endl;
     }
-    break;
-    case IT_OR:
-    {
-        int lop = op1.evaluate(memory);
-        int rop = op2.evaluate(memory);
-        if (lop != -1 && rop != -1)
-        {
-            memory[op3.var] = lop | rop;
-            // std::cout << op3.var << " : " << memory[op3.var] << std::endl;
-        }
-        else
-        {
-            std::cout << "Gate missing value, not executed: " << lop << " " << rop << std::endl;
-        }
+  } break;
+  case IT_OR: {
+    int lop = op1.evaluate(memory);
+    int rop = op2.evaluate(memory);
+    if (lop != -1 && rop != -1) {
+      memory[op3.var] = lop | rop;
+      // std::cout << op3.var << " : " << memory[op3.var] << std::endl;
+    } else {
+      std::cout << "Gate missing value, not executed: " << lop << " " << rop
+                << std::endl;
     }
-    break;
-    case IT_SIGNAL:
-    {
-        int lop = op1.evaluate(memory);
-        if (lop != -1)
-        {
-            memory[op2.var] = lop;
-            // std::cout << op2.var << " : " << memory[op2.var] << std::endl;
-        }
-        else
-        {
-            std::cout << "Failed to signal value. " << std::endl;
-        }
+  } break;
+  case IT_SIGNAL: {
+    int lop = op1.evaluate(memory);
+    if (lop != -1) {
+      memory[op2.var] = lop;
+      // std::cout << op2.var << " : " << memory[op2.var] << std::endl;
+    } else {
+      std::cout << "Failed to signal value. " << std::endl;
     }
-    break;
+  } break;
 
-    case IT_LSHIFT:
-    {
-        int lop = op1.evaluate(memory);
-        int rop = op2.evaluate(memory);
-        if (lop != -1 && rop != -1)
-        {
-            memory[op3.var] = lop << rop;
-            // std::cout << op3.var << " : " << memory[op3.var] << std::endl;
-        }
-        else
-        {
-            std::cout << "Gate missing value, not executed: " << lop << " " << rop << std::endl;
-        }
+  case IT_LSHIFT: {
+    int lop = op1.evaluate(memory);
+    int rop = op2.evaluate(memory);
+    if (lop != -1 && rop != -1) {
+      memory[op3.var] = lop << rop;
+      // std::cout << op3.var << " : " << memory[op3.var] << std::endl;
+    } else {
+      std::cout << "Gate missing value, not executed: " << lop << " " << rop
+                << std::endl;
     }
-    break;
-    case IT_RSHIFT:
-    {
-        int lop = op1.evaluate(memory);
-        int rop = op2.evaluate(memory);
-        if (lop != -1 && rop != -1)
-        {
-            memory[op3.var] = lop >> rop;
-            // std::cout << op3.var << " : " << memory[op3.var] << std::endl;
-        }
-        else
-        {
-            std::cout << "Gate missing value, not executed: " << lop << " " << rop << std::endl;
-        }
+  } break;
+  case IT_RSHIFT: {
+    int lop = op1.evaluate(memory);
+    int rop = op2.evaluate(memory);
+    if (lop != -1 && rop != -1) {
+      memory[op3.var] = lop >> rop;
+      // std::cout << op3.var << " : " << memory[op3.var] << std::endl;
+    } else {
+      std::cout << "Gate missing value, not executed: " << lop << " " << rop
+                << std::endl;
     }
-    break;
-    case IT_NOT:
-    {
-        int lop = op1.evaluate(memory);
-        if (lop != -1)
-        {
-            memory[op2.var] = ~lop;
-            // std::cout << op2.var << " : " << memory[op2.var] << std::endl;
-        }
-        else
-        {
-            std::cout << "Failed to invert." << std::endl;
-        }
+  } break;
+  case IT_NOT: {
+    int lop = op1.evaluate(memory);
+    if (lop != -1) {
+      memory[op2.var] = ~lop;
+      // std::cout << op2.var << " : " << memory[op2.var] << std::endl;
+    } else {
+      std::cout << "Failed to invert." << std::endl;
     }
+  } break;
+  default:
+    std::cerr << "Unknown instruction." << std::endl;
     break;
-    default:
-        std::cerr << "Unknown instruction." << std::endl;
+  }
+}
+
+bool instruction::can_execute(std::map<std::string, unsigned short> &memory) {
+  switch (it) {
+  case IT_OR:
+  case IT_AND:
+    return (op1.var.size() <= 0 || memory.find(op1.var) != memory.end()) &&
+           (op2.var.size() <= 0 || memory.find(op2.var) != memory.end());
+
+  case IT_NOT:
+  case IT_LSHIFT:
+  case IT_RSHIFT:
+  case IT_SIGNAL:
+    return op1.var.size() <= 0 || memory.find(op1.var) != memory.end();
+
+  default:
+    // assert(false && "Unhandled instruction.");
+    break;
+  }
+  return true;
+}
+
+void execute_program(std::vector<instruction> instructions,
+                     std::map<std::string, unsigned short> &memory) {
+  while (instructions.size() > 0) {
+    std::optional<instruction> active;
+    int idx = 0;
+    for (auto &i : instructions) {
+      if (i.can_execute(memory)) {
+        // i.print();
+        i.execute(memory);
+        active = i;
+
+        // std::cout << " === MEMORY LAYOUT === " << std::endl;
+        // for (auto [k, v] : memory)
+        // {
+        //     std::cout << "\t" << k << " : " << v << std::endl;
+        // }
         break;
+      }
+      // else if (instructions.size() <= 320 && i.op1.var.size() <= 1)
+      // {
+      //     std::cout << "Can't execute(" << instructions.size() << "):";
+      //     i.print();
+      // }
+      ++idx;
     }
+    assert(active.has_value());
+    // NOTE: Why cant we just use the obj ?
+    instructions.erase(instructions.begin() + idx);
+  }
 }
 
-bool instruction::can_execute(std::map<std::string, unsigned short> &memory)
-{
-    switch (it)
-    {
-    case IT_OR:
-    case IT_AND:
-        return (op1.var.size() <= 0 || memory.find(op1.var) != memory.end()) &&
-               (op2.var.size() <= 0 || memory.find(op2.var) != memory.end());
-
-    case IT_NOT:
-    case IT_LSHIFT:
-    case IT_RSHIFT:
-    case IT_SIGNAL:
-        return op1.var.size() <= 0 || memory.find(op1.var) != memory.end();
-
-    default:
-        // assert(false && "Unhandled instruction.");
-        break;
+void d7() {
+  int i = 0;
+  int len = ARRAY_COUNT(d7_input);
+  std::vector<instruction> instructions(len);
+  // TODO: Proper parsing, lexing then program construction.
+  while (i < len) {
+    instruction &instruction = instructions[i];
+    const char *digest = d7_input[i];
+    // NOTE: Determine first segment. This can be a:
+    // signal, variable, start of instruction NOT.
+    if ((*digest - '0') >= 0 && (*digest - '0') <= 9) {
+      instruction.it = IT_SIGNAL;
+      instruction.op1.literal = get_number(&digest);
     }
-    return true;
-}
-
-void execute_program(std::vector<instruction> instructions, std::map<std::string, unsigned short> &memory)
-{
-    while (instructions.size() > 0)
-    {
-        std::optional<instruction> active;
-        int idx = 0;
-        for (auto &i : instructions)
-        {
-            if (i.can_execute(memory))
-            {
-                // i.print();
-                i.execute(memory);
-                active = i;
-
-                // std::cout << " === MEMORY LAYOUT === " << std::endl;
-                // for (auto [k, v] : memory)
-                // {
-                //     std::cout << "\t" << k << " : " << v << std::endl;
-                // }
-                break;
-            }
-            // else if (instructions.size() <= 320 && i.op1.var.size() <= 1)
-            // {
-            //     std::cout << "Can't execute(" << instructions.size() << "):";
-            //     i.print();
-            // }
-            ++idx;
-        }
-        assert(active.has_value());
-        // NOTE: Why cant we just use the obj ?
-        instructions.erase(instructions.begin() + idx);
-    }
-}
-
-int d7(int, char **)
-{
-    int i = 0;
-    int len = ARRAY_COUNT(input);
-    std::vector<instruction> instructions(len);
-    // TODO: Proper parsing, lexing then program construction.
-    while (i < len)
-    {
-        instruction &instruction = instructions[i];
-        const char *digest = input[i];
-        // NOTE: Determine first segment. This can be a:
-        // signal, variable, start of instruction NOT.
-        if ((*digest - '0') >= 0 && (*digest - '0') <= 9)
-        {
-            instruction.it = IT_SIGNAL;
-            instruction.op1.literal = get_number(&digest);
-        }
-        // is it a variable ?
-        else if (!(is_whitespace(*digest) || is_numeric(*digest)))
-        {
-            if (*digest == 'N')
-            {
-                // instruction!
-                instruction.it = IT_NOT;
-                digest += 3;
-                instruction.op1.var = get_variable(&digest);
-                instruction.op2.var = get_variable(&digest);
-            }
-            else
-            {
-                instruction.op1.var = get_variable(&digest);
-            }
-        }
-
-        char symb = get_symbol(&digest);
-        if (symb == '-')
-        {
-            // assert(instruction.it == IT_SIGNAL);
-            instruction.it = IT_SIGNAL;
-            instruction.op2.var = get_variable(&digest);
-        }
-        else if (symb == 'A')
-        {
-            instruction.it = IT_AND;
-            digest += 3;
-            instruction.op2.var = get_variable(&digest);
-            instruction.op3.var = get_variable(&digest);
-        }
-        else if (symb == 'O')
-        {
-            instruction.it = IT_OR;
-            digest += 2;
-            instruction.op2.var = get_variable(&digest);
-            instruction.op3.var = get_variable(&digest);
-        }
-        else if (symb == 'L')
-        {
-            digest += 6;
-            instruction.it = IT_LSHIFT;
-            instruction.op2.literal = get_number(&digest);
-            instruction.op3.var = get_variable(&digest);
-        }
-        else if (symb == 'R')
-        {
-            instruction.it = IT_RSHIFT;
-            digest += 6;
-            instruction.op2.literal = get_number(&digest);
-            instruction.op3.var = get_variable(&digest);
-        }
-        else if (instruction.it == IT_NOT)
-        {
-            // done!
-        }
-        else
-        {
-            assert(false && "Unhandled instruction!");
-        }
-        ++i;
+    // is it a variable ?
+    else if (!(is_whitespace(*digest) || is_numeric(*digest))) {
+      if (*digest == 'N') {
+        // instruction!
+        instruction.it = IT_NOT;
+        digest += 3;
+        instruction.op1.var = get_variable(&digest);
+        instruction.op2.var = get_variable(&digest);
+      } else {
+        instruction.op1.var = get_variable(&digest);
+      }
     }
 
-    std::map<std::string, unsigned short> memory;
-    execute_program(instructions, memory);
-    std::cout << "A: " << memory["a"] << std::endl;
-    unsigned short aVal = memory["a"];
-    memory.clear();
-    // memory["b"] = aVal;
-    instructions[54].op1.literal = aVal;
-    // instructions.erase(instructions.begin() + 55);
-    execute_program(instructions, memory);
-    std::cout << "A: " << memory["a"] << std::endl;
-    // std::cout << "Final memory layout:" << std::endl;
-    // for (auto [k, v] : memory)
-    // {
-    //     std::cout << "\t" << k << " : " << v << std::endl;
-    // }
+    char symb = get_symbol(&digest);
+    if (symb == '-') {
+      // assert(instruction.it == IT_SIGNAL);
+      instruction.it = IT_SIGNAL;
+      instruction.op2.var = get_variable(&digest);
+    } else if (symb == 'A') {
+      instruction.it = IT_AND;
+      digest += 3;
+      instruction.op2.var = get_variable(&digest);
+      instruction.op3.var = get_variable(&digest);
+    } else if (symb == 'O') {
+      instruction.it = IT_OR;
+      digest += 2;
+      instruction.op2.var = get_variable(&digest);
+      instruction.op3.var = get_variable(&digest);
+    } else if (symb == 'L') {
+      digest += 6;
+      instruction.it = IT_LSHIFT;
+      instruction.op2.literal = get_number(&digest);
+      instruction.op3.var = get_variable(&digest);
+    } else if (symb == 'R') {
+      instruction.it = IT_RSHIFT;
+      digest += 6;
+      instruction.op2.literal = get_number(&digest);
+      instruction.op3.var = get_variable(&digest);
+    } else if (instruction.it == IT_NOT) {
+      // done!
+    } else {
+      assert(false && "Unhandled instruction!");
+    }
+    ++i;
+  }
 
-    return 0;
+  std::map<std::string, unsigned short> memory;
+  execute_program(instructions, memory);
+  std::cout << "\t1: " << memory["a"] << std::endl;
+  unsigned short aVal = memory["a"];
+  memory.clear();
+  // memory["b"] = aVal;
+  instructions[54].op1.literal = aVal;
+  // instructions.erase(instructions.begin() + 55);
+  execute_program(instructions, memory);
+  std::cout << "\t2: " << memory["a"] << std::endl;
+  // std::cout << "Final memory layout:" << std::endl;
+  // for (auto [k, v] : memory)
+  // {
+  //     std::cout << "\t" << k << " : " << v << std::endl;
+  // }
 }

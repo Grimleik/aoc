@@ -1,11 +1,7 @@
-#include <iostream>
-#include <numeric>
-#include <string.h>
-#include <string>
 
-#define ARRAY_COUNT(x) (sizeof(x) / sizeof(x[0]))
+#include "utils.h"
 
-const char *input[] = {
+const char *d2_input[] = {
     // "2x3x4", "3x2x4", "2x4x3", "3x4x2", "4x3x2", "4x2x3","1x1x10",
     "29x13x26", "11x11x14", "27x2x5",   "6x10x13",  "15x19x10", "26x29x15",
     "8x23x6",   "17x8x26",  "20x28x3",  "23x12x24", "11x17x3",  "19x23x28",
@@ -214,13 +210,13 @@ size_t total_bow_rectangular_prism(const size_t w, const size_t h,
 
 size_t part1() {
   size_t w, h, l, result = 0;
-  for (int i = 0; i < ARRAY_COUNT(input); ++i) {
+  for (int i = 0; i < ARRAY_COUNT(d2_input); ++i) {
     size_t offset = 0, len;
-    w = std::stoi(input[i], &len);
+    w = std::stoi(d2_input[i], &len);
     offset += len + 1;
-    h = std::stoi(input[i] + offset, &len);
+    h = std::stoi(d2_input[i] + offset, &len);
     offset += len + 1;
-    l = std::stoi(input[i] + offset, &len);
+    l = std::stoi(d2_input[i] + offset, &len);
     result += total_area_rectangular_prism(w, h, l);
   }
   return result;
@@ -228,20 +224,19 @@ size_t part1() {
 
 size_t part2() {
   size_t w, h, l, result = 0;
-  for (int i = 0; i < ARRAY_COUNT(input); ++i) {
+  for (int i = 0; i < ARRAY_COUNT(d2_input); ++i) {
     size_t offset = 0, len;
-    w = std::stoi(input[i], &len);
+    w = std::stoi(d2_input[i], &len);
     offset += len + 1;
-    h = std::stoi(input[i] + offset, &len);
+    h = std::stoi(d2_input[i] + offset, &len);
     offset += len + 1;
-    l = std::stoi(input[i] + offset, &len);
+    l = std::stoi(d2_input[i] + offset, &len);
     result += total_bow_rectangular_prism(w, h, l);
   }
   return result;
 }
 
-int main(int, char **) {
-  // size_t w = 2, h = 3, l = 4;
-  //   std::cout << "Ans 1: " << part1() << std::endl;
-  std::cout << "Ans 2: " << part2() << std::endl;
+void d2() {
+  std::cout << "\tAns 1: " << part1() << std::endl;
+  std::cout << "\tAns 2: " << part2() << std::endl;
 }
