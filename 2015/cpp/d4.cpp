@@ -1,3 +1,7 @@
+/*========================================================================
+	Creator: Grimleik $
+========================================================================*/
+#include "d4.h"
 
 // #include <openssl/md5.h>
 // // TODO: Implement MD5 instead ?
@@ -60,7 +64,9 @@
 //   return nbr;
 // }
 
-void d4() {
-  std::cout << "REIMPLEMENT" << std::endl;
-  std::cout << "\1: " << std::endl;
+bool d4::run()
+{
+	std::cout << "REIMPLEMENT" << std::endl;
+	std::cout << "\1: " << std::endl;
+	return false;
 }
