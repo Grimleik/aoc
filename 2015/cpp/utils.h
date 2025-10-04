@@ -39,9 +39,9 @@ typedef double f64;
 			std::cout << std::format("\tPASSED. Input({}) == Output({})", check_output, output) << std::endl; \
 	}
 #else
-#define CHECK_TEST(func, input, output)                                                                       \
+#define CHECK_TEST(func, input, output, ...)                                                                  \
 	{                                                                                                         \
-		auto check_output = func(input);                                                                      \
+		auto check_output = func(input, __VA_ARGS__);                                                         \
 		if (check_output != output)                                                                           \
 		{                                                                                                     \
 			std::cout << std::format("\tFAILED. Input({}) != Output({})", check_output, output) << std::endl; \

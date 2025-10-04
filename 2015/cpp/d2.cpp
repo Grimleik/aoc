@@ -60,7 +60,7 @@ size_t total_bow_rectangular_prism(const box &box)
 	return result;
 }
 
-size_t part1(const std::vector<const char *> &input)
+size_t solution(const std::vector<const char *> &input, std::function<size_t(box &)> calc)
 {
 	box b;
 	size_t result = 0;
@@ -72,24 +72,7 @@ size_t part1(const std::vector<const char *> &input)
 		b.h = std::stoi(c + offset, &len);
 		offset += len + 1;
 		b.l = std::stoi(c + offset, &len);
-		result += total_area_rectangular_prism(b);
-	}
-	return result;
-}
-
-size_t part2(const std::vector<const char *> &input)
-{
-	box b;
-	size_t result = 0;
-	for (auto &c : input)
-	{
-		size_t offset = 0, len;
-		b.w = std::stoi(c, &len);
-		offset += len + 1;
-		b.h = std::stoi(c + offset, &len);
-		offset += len + 1;
-		b.l = std::stoi(c + offset, &len);
-		result += total_bow_rectangular_prism(b);
+		result += calc(b);
 	}
 	return result;
 }
@@ -97,10 +80,10 @@ size_t part2(const std::vector<const char *> &input)
 bool d2::run()
 {
 	for (auto &el : input)
-		CHECK_TEST(part1, el.first, el.second.first);
+		CHECK_TEST(solution, el.first, el.second.first, total_area_rectangular_prism);
 
 	for (auto &el : input)
-		CHECK_TEST(part2, el.first, el.second.second);
+		CHECK_TEST(solution, el.first, el.second.second, total_bow_rectangular_prism);
 
 	return true;
 }
