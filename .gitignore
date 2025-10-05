@@ -7,7 +7,7 @@
 **/CMakeCache.txt
 **/cmake_install.cmake
 **/Makefile
-**/vcpkg/**
+**/vcpkg_installed/**
 
 # Visual Studio Code
 .vscode/
