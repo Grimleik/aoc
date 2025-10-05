@@ -194,4 +194,14 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &vec)
 	return os;
 }
 
+template <typename WorkerFunc, typename... Args>
+void parallelize_function(size_t nbr_threads, WorkerFunc worker, Args &&...args)
+{
+	std::vector<std::thread> threads;
+	for (size_t i = 0; i < nbr_threads; ++i)
+		threads.emplace_back(worker, std::forward<Args>(args)...);
+	for (auto &t : threads)
+		t.join();
+}
+
 #endif

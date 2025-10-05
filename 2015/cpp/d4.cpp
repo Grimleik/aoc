@@ -2,71 +2,89 @@
 	Creator: Grimleik $
 ========================================================================*/
 #include "d4.h"
+#include <openssl/md5.h>
+#include <thread>
+#include <mutex>
+#include <vector>
+#include <iostream>
 
-// #include <openssl/md5.h>
-// // TODO: Implement MD5 instead ?
-// //
-// // STUDY: I think there is a part of the
-// // algorithm which inserts the padding of 0's that we can exploit.
-// const unsigned int s[64] = {
-//     7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
-//     5, 9,  14, 20, 5, 9,  14, 20, 5, 9,  14, 20, 5, 9,  14, 20,
-//     4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
-//     6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21,
-// };
-// const unsigned int K[64] = {
-//     0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee, 0xf57c0faf, 0x4787c62a,
-//     0xa8304613, 0xfd469501, 0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,
-//     0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821, 0xf61e2562, 0xc040b340,
-//     0x265e5a51, 0xe9b6c7aa, 0xd62f105d, 0x02441453, 0xd8a1e681, 0xe7d3fbc8,
-//     0x21e1cde6, 0xc33707d6, 0xf4d50d87, 0x455a14ed, 0xa9e3e905, 0xfcefa3f8,
-//     0x676f02d9, 0x8d2a4c8a, 0xfffa3942, 0x8771f681, 0x6d9d6122, 0xfde5380c,
-//     0xa4beea44, 0x4bdecfa9, 0xf6bb4b60, 0xbebfbc70, 0x289b7ec6, 0xeaa127fa,
-//     0xd4ef3085, 0x04881d05, 0xd9d4d039, 0xe6db99e5, 0x1fa27cf8, 0xc4ac5665,
-//     0xf4292244, 0x432aff97, 0xab9423a7, 0xfc93a039, 0x655b59c3, 0x8f0ccc92,
-//     0xffeff47d, 0x85845dd1, 0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,
-//     0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391};
-// const char *d4_words[] = {"abcdef", "pqrstuv", "iwrupvqb"};
-// const int d4_ans[] = {609043, 1048970};
+struct shared_state_t
+{
+	const std::string_view &sv;
+	const std::function<bool(const unsigned char *)> &predicate;
+	std::atomic<int> work_item = {0};
+	std::atomic<int> keep_working = {1};
+	std::atomic<int> answer = {INT_MAX};
+};
 
-// int md5_zeros_hash(const char *msg) {
-//   //   int a0 = 0x67452301;
-//   //   int b0 = 0xefcdab89;
-//   //   int c0 = 0x98badcfe;
-//   //   int d0 = 0x10325476;
-//   int nbr = 0;
-//   std::string input(msg);
-//   // auto start = std::chrono::high_resolution_clock::now();
-//   unsigned char md[MD5_DIGEST_LENGTH];
-//   while (nbr < INT_MAX) {
-//     input = msg + std::to_string(nbr);
-//     MD5((const unsigned char *)(input.c_str()), input.size(), md);
-//     if ((int)md[0] == 0 && (int)md[1] == 0 && (int)md[2] == 0)
-//       break;
-//     if (!(nbr % 10000)) {
-//       auto end = std::chrono::high_resolution_clock::now();
-//       std::cout << nbr << " Done, time elapsed: "
-//                 << std::chrono::duration_cast<std::chrono::milliseconds>(end
-//                 -
-//                                                                          start)
-//                        .count()
-//                 << "." << std::endl;
-//       start = end;
-//     }
-//     std::cout << "MD5(" << msg << ") = ";
-//     for (int i = 0; i < MD5_DIGEST_LENGTH; ++i) {
-//       std::cout << std::hex << std::setw(2) << std::setfill('0') <<
-//       (int)md[i];
-//     }
-//     std::cout << std::endl;
-//     ++nbr;
-//   }
-//   return nbr;
-// }
+int md5_zeros_hash_mt(const std::string_view sv, const std::function<bool(const unsigned char *)> &predicate)
+{
+	shared_state_t shared_state(sv, predicate);
+	parallelize_function(std::thread::hardware_concurrency(), [](shared_state_t *ss)
+						 {
+			std::string input;
+			input.reserve(ss->sv.size() + 32);
+			unsigned char md[MD5_DIGEST_LENGTH];
+			while(ss->keep_working.load())
+			{
+				input.assign(ss->sv);
+				int nbr = ss->work_item.fetch_add(1);
+				input += std::to_string(nbr);
+				MD5((const unsigned char *)(input.c_str()), input.size(), md);
+				if (ss->predicate(md))
+				{
+					std::cout << std::dec << "MD5(" << ss->sv << " + " << nbr << ") = ";
+					for (int i = 0; i < MD5_DIGEST_LENGTH; ++i)
+					{
+						std::cout << std::hex << std::setw(2) << std::setfill('0') << (int)md[i];
+					}
+					std::cout << std::endl;
+					ss->keep_working.store(0);
+					int old = ss->answer.load();
+					while(nbr < old && !ss->answer.compare_exchange_strong(old, nbr));
+					break;
+				}
+			} }, &shared_state);
+	return shared_state.answer;
+}
+
+// Original single threaded implementation.
+int md5_zeros_hash_st(const std::string_view sv, const std::function<bool(const unsigned char *)> &predicate)
+{
+	int nbr = 0;
+	std::string input;
+	input.reserve(sv.size() + 32);
+	unsigned char md[MD5_DIGEST_LENGTH];
+	// nbr = 609043;
+	while (nbr < INT_MAX)
+	{
+		input.assign(sv);
+		input += std::to_string(nbr);
+		MD5((const unsigned char *)(input.c_str()), input.size(), md);
+		if (predicate(md))
+		{
+			std::cout << std::dec << "MD5(" << sv << " + " << nbr << ") = ";
+			for (int i = 0; i < MD5_DIGEST_LENGTH; ++i)
+			{
+				std::cout << std::hex << std::setw(2) << std::setfill('0') << (int)md[i];
+			}
+			std::cout << std::endl;
+			break;
+		}
+		++nbr;
+	}
+	return nbr;
+}
 
 bool d4::run()
 {
-	std::cout << "REIMPLEMENT" << std::endl;
-	std::cout << "\1: " << std::endl;
-	return false;
+	for (auto &el : d4_data)
+		CHECK_TEST(md5_zeros_hash_mt, el.first, el.second.first, [](const unsigned char *md)
+				   { return ((unsigned int)md[0] == 0 && (unsigned int)md[1] == 0 && ((unsigned int)md[2] >> 4) == 0); });
+
+	for (auto el = d4_data.begin() + 2; el != d4_data.end(); ++el)
+		CHECK_TEST(md5_zeros_hash_mt, el->first, el->second.second, [](const unsigned char *md)
+				   { return ((unsigned int)md[0] == 0 && (unsigned int)md[1] == 0 && ((unsigned int)md[2]) == 0); });
+
+	return true;
 }
