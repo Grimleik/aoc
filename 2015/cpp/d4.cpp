@@ -33,12 +33,14 @@ int md5_zeros_hash_mt(const std::string_view sv, const std::function<bool(const 
 				MD5((const unsigned char *)(input.c_str()), input.size(), md);
 				if (ss->predicate(md))
 				{
+#ifdef VERBOSE
 					std::cout << std::dec << "MD5(" << ss->sv << " + " << nbr << ") = ";
 					for (int i = 0; i < MD5_DIGEST_LENGTH; ++i)
 					{
 						std::cout << std::hex << std::setw(2) << std::setfill('0') << (int)md[i];
 					}
 					std::cout << std::endl;
+#endif
 					ss->keep_working.store(0);
 					int old = ss->answer.load();
 					while(nbr < old && !ss->answer.compare_exchange_strong(old, nbr));
@@ -63,12 +65,14 @@ int md5_zeros_hash_st(const std::string_view sv, const std::function<bool(const 
 		MD5((const unsigned char *)(input.c_str()), input.size(), md);
 		if (predicate(md))
 		{
+#ifdef VERBOSE
 			std::cout << std::dec << "MD5(" << sv << " + " << nbr << ") = ";
 			for (int i = 0; i < MD5_DIGEST_LENGTH; ++i)
 			{
 				std::cout << std::hex << std::setw(2) << std::setfill('0') << (int)md[i];
 			}
 			std::cout << std::endl;
+#endif
 			break;
 		}
 		++nbr;

@@ -24,7 +24,7 @@ int d3::house_delivery(const std::string_view path)
 	std::unordered_map<u64, i32> visit;
 	// std::unordered_map<std::pair<int, int>, int, pair_hash> visit;
 	// visit[{0, 0}] = 1;
-	// visit[0] = 1;
+	visit[0] = 1;
 
 	for (auto &c : path)
 	{
