@@ -12,6 +12,7 @@
 #include "d5.h"
 #include "d6.h"
 #include "d7.h"
+#include "d8.h"
 #include "d12.h"
 
 // clang-format off
@@ -25,6 +26,7 @@ static std::unique_ptr<aoc_day> factory(int i) {
 		case 5: return std::make_unique<d5>();
 		case 6: return std::make_unique<d6>();
 		case 7: return std::make_unique<d7>();
+		case 8: return std::make_unique<d8>();
 		case 12: return std::make_unique<d12>();
 		default: assert(false && "Day not implemented.");
 	}

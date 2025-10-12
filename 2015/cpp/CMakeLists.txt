@@ -7,7 +7,7 @@ file(GLOB DAY_SOURCES "d*.cpp")
 # Add executable and enable precompiled headers
 add_executable(aoc main.cpp aoc.cpp
     d1.cpp d2.cpp d3.cpp d4.cpp d5.cpp
-    d6.cpp d7.cpp d12.cpp
+    d6.cpp d7.cpp d8.cpp d12.cpp
 )
 target_precompile_headers(aoc PRIVATE pch.h)
 target_link_libraries(aoc PRIVATE OpenSSL::Crypto)

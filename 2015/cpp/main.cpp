@@ -1,8 +1,6 @@
 #include "aoc.h"
 #include <windows.h>
 #include <psapi.h>
-#undef max
-#undef min
 
 // #define MEMORY_BENCHMARK
 
@@ -27,7 +25,7 @@ int main(int argc, char **argv)
 		// 5,
 		// 6,
 		// 7,
-		// 8,
+		8,
 		// 9,
 		// 10,
 		// 11,
