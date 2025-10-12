@@ -37,6 +37,12 @@ int get_basement(const std::string_view floor)
 	return basement;
 }
 
+d1::d1()
+{
+	input_file = read_entire_file("../../../../2015/input/d1.in");
+	input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(138, 1771)));
+}
+
 bool d1::run()
 {
 	for (auto &el : input)

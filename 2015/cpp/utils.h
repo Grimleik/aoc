@@ -1,6 +1,7 @@
 #if !defined(UTILS_H)
 /*========================================================================
 	Creator: Grimleik $
+	STUDY: Move some of the inline functions into .cpp file?
 ========================================================================*/
 #define UTILS_H
 #include "pch.h"
@@ -27,16 +28,18 @@ typedef double f64;
 	} while (false);
 
 #ifdef VERBOSE
-#define CHECK_TEST(func, input, output)                                                                       \
+#define CHECK_TEST(func, input, output, ...)                                                                  \
 	{                                                                                                         \
-		auto check_output = func(input);                                                                      \
+		auto check_output = func(input, __VA_ARGS__);                                                         \
 		if (check_output != output)                                                                           \
 		{                                                                                                     \
 			std::cout << std::format("\tFAILED. Input({}) != Output({})", check_output, output) << std::endl; \
 			return false;                                                                                     \
 		}                                                                                                     \
 		else                                                                                                  \
+		{                                                                                                     \
 			std::cout << std::format("\tPASSED. Input({}) == Output({})", check_output, output) << std::endl; \
+		}                                                                                                     \
 	}
 #else
 #define CHECK_TEST(func, input, output, ...)                                                                  \
@@ -52,22 +55,22 @@ typedef double f64;
 
 struct file_contents
 {
+	~file_contents() { delete[] mem; }
 	char *mem;
 	size_t sz;
 };
 
-inline file_contents read_entire_file(const char *filename)
+inline std::unique_ptr<file_contents> read_entire_file(const char *filename)
 {
-	file_contents result = {0};
+	std::unique_ptr<file_contents> result = std::unique_ptr<file_contents>(new file_contents());
 	std::ifstream file(filename, std::ios::in | std::ios::ate);
 	if (file.is_open())
 	{
-		result.sz = file.tellg();
-		// *output = (const char*)malloc(*length);
+		result->sz = file.tellg();
 		file.seekg(0, std::ios::beg);
-		result.mem = new char[result.sz + 1];
-		file.read(result.mem, result.sz);
-		result.mem[result.sz] = '\0';
+		result->mem = new char[result->sz + 1];
+		file.read(result->mem, result->sz);
+		result->mem[result->sz] = '\0';
 	}
 	file.close();
 	return result;
@@ -155,6 +158,29 @@ inline int get_number(const char **c)
 	return result;
 }
 
+inline double get_number_d(const char *c, size_t &steps)
+{
+	const char *orig = c;
+	double result = 0;
+	while (!is_numeric(*c))
+		c++;
+
+	while (*c >= '0' && *c <= '9')
+	{
+		result = result * 10 + (int)(*c - '0');
+		++c;
+	}
+
+	if (*c == '.')
+		while (*c >= '0' && *c <= '9')
+		{
+			result = result * .1 + (int)(*c - '0');
+			++c;
+		}
+	steps += c - orig;
+	return result;
+}
+
 inline char get_symbol(const char **c)
 {
 	while (is_whitespace(**c) || is_numeric(**c))
@@ -202,6 +228,24 @@ void parallelize_function(size_t nbr_threads, WorkerFunc worker, Args &&...args)
 		threads.emplace_back(worker, std::forward<Args>(args)...);
 	for (auto &t : threads)
 		t.join();
+}
+
+inline std::vector<std::string_view> split_string_view(const std::string_view &sv, char delim = '\n')
+{
+	std::vector<std::string_view> result;
+	size_t start = 0;
+	while (start < sv.size())
+	{
+		size_t end = sv.find(delim, start);
+		if (end == std::string_view::npos)
+		{
+			// result.emplace_back(sv.substr(start));
+			break;
+		}
+		result.emplace_back(sv.substr(start, end - start));
+		start = end + 1;
+	}
+	return result;
 }
 
 #endif

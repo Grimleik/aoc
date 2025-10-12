@@ -8,6 +8,7 @@
 **/cmake_install.cmake
 **/Makefile
 **/vcpkg_installed/**
+**/input/**
 
 # Visual Studio Code
 .vscode/

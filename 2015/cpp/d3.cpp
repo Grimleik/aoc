@@ -8,22 +8,11 @@
 ========================================================================*/
 #include "d3.h"
 
-// struct pair_hash
-// {
-// 	template <class T1, class T2>
-// 	std::size_t operator()(const std::pair<T1, T2> &p) const
-// 	{
-// 		return std::hash<T1>()(p.first) ^ (std::hash<T2>()(p.second) << 1);
-// 	}
-// };
-
 int d3::house_delivery(const std::string_view path)
 {
 	int actorId = 0;
 	std::vector<std::pair<i32, i32>> actorLocations(nrActors);
 	std::unordered_map<u64, i32> visit;
-	// std::unordered_map<std::pair<int, int>, int, pair_hash> visit;
-	// visit[{0, 0}] = 1;
 	visit[0] = 1;
 
 	for (auto &c : path)
@@ -50,8 +39,9 @@ int d3::house_delivery(const std::string_view path)
 		else
 		{
 			std::cout << "Failure reading path instruction: " << c << std::endl;
+			continue;
 		}
-		// visit[{x, y}] = 1;
+
 		u64 key = static_cast<u64>(x) << 32;
 		key |= static_cast<u32>(y);
 		visit[key] = 1;
@@ -60,14 +50,20 @@ int d3::house_delivery(const std::string_view path)
 	return (int)(visit.size());
 }
 
+d3::d3()
+{
+	input_file = std::move(read_entire_file("../../../../2015/input/d3.in"));
+	input.emplace_back(std::string_view(input_file->mem, input_file->sz), std::make_pair(2592, 2360));
+}
+
 bool d3::run()
 {
 	nrActors = 1;
-	for (auto &t : d3_data)
+	for (auto &t : input)
 		CHECK_TEST(house_delivery, t.first, t.second.first);
 
 	nrActors = 2;
-	for (auto &t : d3_data)
+	for (auto &t : input)
 		CHECK_TEST(house_delivery, t.first, t.second.second);
 
 	return true;
@@ -111,11 +107,11 @@ void d3::pre_benchmark()
 	// 100'000
 	// d3_data.push_back(std::make_pair(std::string_view(benchmark_string), std::make_pair(23829, 26353)));
 	// 1'000'000
-	d3_data.push_back(std::make_pair(std::string_view(benchmark_string), std::make_pair(59908, 60007)));
+	input.push_back(std::make_pair(std::string_view(benchmark_string), std::make_pair(59908, 60007)));
 }
 
 void d3::post_benchmark()
 {
 	benchmark_string.clear();
-	d3_data.pop_back();
+	input.pop_back();
 }

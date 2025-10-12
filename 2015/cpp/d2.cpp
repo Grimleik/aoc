@@ -60,21 +60,30 @@ size_t total_bow_rectangular_prism(const box &box)
 	return result;
 }
 
-size_t solution(const std::vector<const char *> &input, std::function<size_t(box &)> calc)
+size_t solution(const std::string_view &sv, std::function<size_t(box &)> calc)
 {
 	box b;
 	size_t result = 0;
-	for (auto &c : input)
+	auto splits = split_string_view(sv);
+	int idx = 0;
+	for (auto &split : splits)
 	{
+		++idx;
 		size_t offset = 0, len;
-		b.w = std::stoi(c, &len);
+		b.w = std::stoi(split.data(), &len);
 		offset += len + 1;
-		b.h = std::stoi(c + offset, &len);
+		b.h = std::stoi(split.data() + offset, &len);
 		offset += len + 1;
-		b.l = std::stoi(c + offset, &len);
+		b.l = std::stoi(split.data() + offset, &len);
 		result += calc(b);
 	}
 	return result;
+}
+
+d2::d2()
+{
+	input_file = read_entire_file("../../../../2015/input/d2.in");
+	input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(1586300, 3737498)));
 }
 
 bool d2::run()

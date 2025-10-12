@@ -69,14 +69,14 @@ bool d5_strings_p2(const std::string_view &sv)
 	return rule1 >= 1 && rule2 >= 1;
 }
 
+d5::d5()
+{
+	input_file = std::move(read_entire_file("../../../../2015/input/d5.in"));
+	input = split_string_view(std::string_view(input_file->mem, input_file->sz), '\n');
+}
+
 bool d5::run()
 {
-	for (auto &el : input_test_p1)
-		CHECK_TEST(d5_strings, el.first, el.second);
-
-	for (auto &el : input_test_p2)
-		CHECK_TEST(d5_strings_p2, el.first, el.second);
-
 	int result[2] = {0, 0}, ans[2] = {238, 69};
 	for (int i = 0; i < input.size(); ++i)
 	{
