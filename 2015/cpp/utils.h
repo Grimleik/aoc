@@ -230,7 +230,7 @@ void parallelize_function(size_t nbr_threads, WorkerFunc worker, Args &&...args)
 		t.join();
 }
 
-inline std::vector<std::string_view> split_string_view(const std::string_view &sv, char delim = '\n')
+inline std::vector<std::string_view> split_string_view(const std::string_view &sv, char delim = '\n', bool add_last = false)
 {
 	std::vector<std::string_view> result;
 	size_t start = 0;
@@ -239,7 +239,8 @@ inline std::vector<std::string_view> split_string_view(const std::string_view &s
 		size_t end = sv.find(delim, start);
 		if (end == std::string_view::npos)
 		{
-			// result.emplace_back(sv.substr(start));
+			if (add_last)
+				result.emplace_back(sv.substr(start));
 			break;
 		}
 		result.emplace_back(sv.substr(start, end - start));
