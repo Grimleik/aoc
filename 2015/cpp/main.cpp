@@ -18,17 +18,17 @@ int main(int argc, char **argv)
 	size_t mem_before = getCurrentRSS();
 #endif
 	aoc y2015({
-		// 1,
-		// 2,
-		// 3,
-		// 4,
-		// 5,
-		// 6,
-		// 7,
-		// 8,
+		1,
+		2,
+		3,
+		4,
+		5,
+		6,
+		7,
+		8,
 		9,
-		// 10,
-		// 11,
+		10,
+		11,
 		12,
 		//
 	});
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 	size_t mem_after = getCurrentRSS();
 	std::cout << "Memory used " << (mem_after - mem_before) / 1024 << " KB" << std::endl;
 #endif
-	y2015.benchmark(100);
+	// y2015.benchmark(100);
 
 	return 0;
 }

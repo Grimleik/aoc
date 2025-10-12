@@ -3,71 +3,67 @@
 ========================================================================*/
 #include <utility>
 #include "utils.h"
+#include "d10.h"
 
-static std::pair<std::vector<int>, std::vector<int>> tests[] = {
-	{{1}, {1, 1}},
-	{{1, 1}, {2, 1}},
-	{{2, 1}, {1, 2, 1, 1}},
-	{{1, 2, 1, 1}, {1, 1, 1, 2, 2, 1}},
-	{{1, 1, 1, 2, 2, 1}, {3, 1, 2, 2, 1, 1}}};
-
-void d10_solve(const std::vector<int> &input, std::vector<int> &output)
+d10::d10()
 {
+	input_file = read_entire_file("../../../../2015/input/d10.in");
+	input.emplace_back(std::make_pair(std::string_view(input_file->mem, input_file->sz),
+									  std::make_pair(329356, 4666278)));
+}
+
+bool d10::run()
+{
+	auto ans = solution(input[0].first);
+	CHECK_VALUE(ans.first, input[0].second.first);
+	CHECK_VALUE(ans.second, input[0].second.second);
+	return true;
+}
+
+static void solver(const std::vector<int> &input, std::vector<int> &output)
+{
+	output.clear();
+	output.reserve(input.size() * 2);
 	for (size_t i = 0; i < input.size();)
 	{
-		for (size_t j = i; j < input.size(); ++j)
-		{
-			if (input[i] != input[j])
-			{
-				// Insert the diff count..
-				output.push_back(j - i);
-				// .. then insert the 'number'.
-				output.push_back(input[i]);
-				// output.insert(output.end(), j - i, input[i]);
-				i = j;
-				break;
-			}
-			else if (j + 1 >= input.size())
-			{
-				++j;
-				// Insert the diff count..
-				output.push_back(j - i);
-				// .. then insert the 'number'.
-				output.push_back(input[i]);
-				// output.insert(output.end(), j - i, input[i]);
-				i = j;
-				break;
-			}
-		}
+		size_t j = i + 1;
+		while (j < input.size() && input[j] == input[i])
+			++j;
+		output.push_back(static_cast<int>(j - i));
+		output.push_back(input[i]);
+		i = j;
 	}
 }
 
-void d10()
+void parse_input(const std::string_view &sv, std::vector<int> &out)
 {
-	std::vector<int> output;
-	for (int i = 0; i < ARRAY_COUNT(tests); ++i)
+	for (char c : sv)
 	{
-		auto &input = tests[i].first;
-		auto &solution = tests[i].second;
-		output.clear();
-		d10_solve(input, output);
-		if (solution == output)
-		{
-			std::cout << "Tests passed." << std::endl;
-		}
+		if (is_numeric(c))
+			out.emplace_back((int)c - '0');
+#ifdef VERBOSE
 		else
-		{
-			std::cout << "Tests failed. Solution (" << solution << ") Output(" << output << ")." << std::endl;
-			return;
-		}
+			std::cout << "Input parsing error, non numeric value in input." << std::endl;
+#endif
 	}
-	std::vector<int> input = {3, 1, 1, 3, 3, 2, 2, 1, 1, 3};
+}
+
+std::pair<int, int> d10::solution(const std::string_view &sv)
+{
+	std::pair<int, int> result = {0, 0};
+	std::vector<int> output;
+	std::vector<int> input;
+	parse_input(sv, input);
+
 	for (int it = 0; it < 50; ++it)
 	{
-		output.clear();
-		d10_solve(input, output);
-		// std::cout << output << std::endl;
-		input = output;
+		solver(input, output);
+		input.swap(output);
+		if (it == 39)
+		{
+			result.first = (int)input.size();
+		}
 	}
-	std::cout << "Final ans is: " << input.size(); //<< " Sequence: " << input << std::endl;
+	result.second = (int)input.size();
+	return result;
 }

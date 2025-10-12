@@ -3,8 +3,9 @@
 ========================================================================*/
 #include "utils.h"
 #include <string.h>
+#include "d11.h"
 
-static std::string d11_solver(const std::string input)
+static std::string solver(const std::string_view &sv)
 {
 	// Define a rule set;
 	std::vector<std::function<bool(const std::string &)>> rules = {
@@ -47,7 +48,8 @@ static std::string d11_solver(const std::string input)
 			return count > 1;
 		},
 	};
-	std::string result = input;
+
+	std::string result(sv);
 	bool search = true;
 	while (search)
 	{
@@ -82,26 +84,24 @@ static std::string d11_solver(const std::string input)
 	return result;
 }
 
-static std::pair<std::string, std::string> tests_d11[] = {
-	{"abcdefgh", "abcdffaa"},
-	{"ghijklmn", "ghjaabcc"}};
-
-void d11()
+d11::d11()
 {
-	for (int i = 0; i < ARRAY_COUNT(tests_d11); ++i)
-	{
-		auto &input = tests_d11[i].first;
-		auto &solution = tests_d11[i].second;
-		std::string answer = d11_solver(input);
-		if (solution == answer)
-		{
-			std::cout << "Tests passed." << std::endl;
-		}
-		else
-		{
-			std::cout << "Tests failed. Solution (" << solution << ") Ans(" << answer << ")." << std::endl;
-			return;
-		}
-	}
-	std::cout << d11_solver(d11_solver("cqjxjnds")) << std::endl;
+	input_file = read_entire_file("../../../../2015/input/d11.in");
+	input.emplace_back(std::string_view(input_file->mem, input_file->sz), std::make_pair("cqjxxyzz", "cqkaabcc"));
+}
+
+bool d11::run()
+{
+	auto ans = solution(input[0].first);
+	CHECK_VALUE(ans.first, input[0].second.first);
+	CHECK_VALUE(ans.second, input[0].second.second);
+	return true;
+}
+
+std::pair<d11::ans_t, d11::ans_t> d11::solution(const std::string_view &sv)
+{
+	std::pair<ans_t, ans_t> result;
+	result.first = solver(sv);
+	result.second = solver(result.first);
+	return result;
 }
