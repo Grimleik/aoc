@@ -17,6 +17,7 @@
 #include "d10.h"
 #include "d11.h"
 #include "d12.h"
+#include "d13.h"
 
 // clang-format off
 static std::unique_ptr<aoc_day> factory(int i) {
@@ -34,6 +35,7 @@ static std::unique_ptr<aoc_day> factory(int i) {
 		case 10: return std::make_unique<d10>();
 		case 11: return std::make_unique<d11>();
 		case 12: return std::make_unique<d12>();
+		case 13: return std::make_unique<d13>();
 		default: assert(false && "Day not implemented.");
 	}
 	return nullptr;
@@ -54,7 +56,7 @@ bool aoc::check()
 	for (auto &day : days)
 	{
 #ifdef VERBOSE
-		std::cout << "Day " << d << std::endl;
+		std::cout << "Day " << day->day() << std::endl;
 #endif
 		auto start = std::chrono::high_resolution_clock::now();
 		if (!day->run())
