@@ -18,6 +18,7 @@
 #include "d11.h"
 #include "d12.h"
 #include "d13.h"
+#include "d14.h"
 
 // clang-format off
 static std::unique_ptr<aoc_day> factory(int i) {
@@ -36,6 +37,7 @@ static std::unique_ptr<aoc_day> factory(int i) {
 		case 11: return std::make_unique<d11>();
 		case 12: return std::make_unique<d12>();
 		case 13: return std::make_unique<d13>();
+		case 14: return std::make_unique<d14>();
 		default: assert(false && "Day not implemented.");
 	}
 	return nullptr;
