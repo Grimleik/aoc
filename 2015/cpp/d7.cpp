@@ -382,7 +382,7 @@ void execute_program(std::vector<instruction> instructions,
 void parse_instructions(const std::string_view &sv, std::vector<instruction> &instructions)
 {
 	int i = 0;
-	std::vector<std::string_view> split = split_string_view(sv);
+	std::vector<std::string_view> split = string_view_split(sv);
 	instructions.resize(split.size());
 	while (i < split.size())
 	{

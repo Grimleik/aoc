@@ -8,7 +8,7 @@
 
 void d6::parse(const std::string_view &input, std::vector<d6_instruction> &out)
 {
-	std::vector<std::string_view> splits = split_string_view(input, '\n');
+	std::vector<std::string_view> splits = string_view_split(input, '\n');
 	out.resize(splits.size());
 	for (int i = 0; i < splits.size(); ++i)
 	{

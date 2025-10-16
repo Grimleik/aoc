@@ -64,7 +64,7 @@ size_t solution(const std::string_view &sv, std::function<size_t(box &)> calc)
 {
 	box b;
 	size_t result = 0;
-	auto splits = split_string_view(sv);
+	auto splits = string_view_split(sv);
 	int idx = 0;
 	for (auto &split : splits)
 	{

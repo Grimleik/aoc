@@ -46,7 +46,7 @@ void d13::parse_graph(const std::string_view &sv)
 	std::map<std::string_view, int> name_ids;
 	int name_id = 0;
 
-	auto lines = split_string_view(sv, '\n');
+	auto lines = string_view_split(sv, '\n');
 
 	graph.clear();
 	// Calculate M = N*N-1. where M is given and N is asked for.
@@ -58,7 +58,7 @@ void d13::parse_graph(const std::string_view &sv)
 		row.resize(N + 1);
 	for (auto &line : lines)
 	{
-		auto parts = split_string_view(line, ' ', true);
+		auto parts = string_view_split(line, ' ', true);
 		assert(parts.size() == 11);
 		std::string_view src = parts[0], gain = parts[2], value = parts[3], dst = parts[10];
 		dst.remove_suffix(1);

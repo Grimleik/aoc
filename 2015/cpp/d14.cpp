@@ -27,9 +27,9 @@ std::pair<d14::ans_t, d14::ans_t> d14::solution(const std::string_view &sv)
 	std::pair<ans_t, ans_t> result;
 	// parse input.
 	reindeers.clear();
-	for (auto &line : split_string_view(sv, '\n'))
+	for (auto &line : string_view_split(sv, '\n'))
 	{
-		auto parse = split_string_view(line, ' ');
+		auto parse = string_view_split(line, ' ');
 		assert(parse.size() >= 13);
 		std::string_view speed_s = parse[3], move_duration_s = parse[6],
 						 rest_duration_s = parse[13];

@@ -43,10 +43,10 @@ void d9::parse_map(const std::string_view &sv)
 	std::map<std::string, int> city_ids;
 	int city_id = 0;
 
-	auto lines = split_string_view(sv, '\n');
+	auto lines = string_view_split(sv, '\n');
 	for (auto &line : lines)
 	{
-		auto parts = split_string_view(line, ' ', true);
+		auto parts = string_view_split(line, ' ', true);
 #ifdef VERBOSE
 		if (parts.size() != 5)
 		{
