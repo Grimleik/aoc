@@ -263,4 +263,22 @@ inline int string_view_to_int(const std::string_view &sv)
 	return result;
 }
 
+inline void render(const std::string &out)
+{
+
+	// move cursor to top-left instead of clearing screen (faster)
+#ifdef _WIN32
+	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD home = {0, 0};
+	SetConsoleCursorPosition(h, home);
+	// write with fwrite for speed
+	std::fwrite(out.data(), 1, out.size(), stdout);
+#else // ANSI move cursor home then write
+	std::fwrite("\x1b[H", 1, 3, stdout);
+	std::fwrite(out.data(), 1, out.size(), stdout);
+#endif
+	// flush once per frame (necessary to ensure output appears)
+	fflush(stdout);
+}
+
 #endif

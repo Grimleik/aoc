@@ -42,9 +42,9 @@ enum class JSONTokenType
 	COMMA,
 	STRING,
 	NUMBER,
-	TRUE,
-	FALSE,
-	NULL_VALUE,
+	JTRUE,
+	JFALSE,
+	JNULL_VALUE,
 	END
 };
 

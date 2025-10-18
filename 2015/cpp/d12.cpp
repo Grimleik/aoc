@@ -35,18 +35,18 @@ void tokenize(const std::string_view &sv, std::queue<JSONToken> &tokens)
 		}
 		else if (sv[i] == 'n') // ull
 		{
-			tokens.push({JSONTokenType::NULL_VALUE, nullptr});
+			tokens.push({JSONTokenType::JNULL_VALUE, nullptr});
 			i += 3;
 		}
 		else if (sv[i] == 'f') // alse
 		{
-			tokens.push({JSONTokenType::FALSE, false});
+			tokens.push({JSONTokenType::JFALSE, false});
 			i += 4;
 		}
 
 		else if (sv[i] == 't') // rue
 		{
-			tokens.push({JSONTokenType::TRUE, true});
+			tokens.push({JSONTokenType::JTRUE, true});
 			i += 3;
 		}
 		else if (sv[i] == '\"')
@@ -122,8 +122,8 @@ JSONValue *parse_token(std::queue<JSONToken> &tokens)
 		return jv;
 	}
 	break;
-	case JSONTokenType::TRUE:
-	case JSONTokenType::FALSE:
+	case JSONTokenType::JTRUE:
+	case JSONTokenType::JFALSE:
 	{
 		JSONValue *jv = new JSONValue;
 		jv->type = JSONObjectType::VALUE;
@@ -131,7 +131,7 @@ JSONValue *parse_token(std::queue<JSONToken> &tokens)
 		return jv;
 	}
 	break;
-	case JSONTokenType::NULL_VALUE:
+	case JSONTokenType::JNULL_VALUE:
 
 	{
 		JSONValue *jv = new JSONValue;
