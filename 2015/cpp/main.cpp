@@ -2,7 +2,7 @@
 #include <windows.h>
 #include <psapi.h>
 
-// #define BENCHMARK
+#define BENCHMARK
 // #define MEMORY_BENCHMARK
 
 size_t getCurrentRSS()

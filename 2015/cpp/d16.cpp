@@ -23,17 +23,17 @@ std::pair<d16::ans_t, d16::ans_t> d16::solution(const std::string_view &sv)
 {
 	aunts.clear();
 	std::pair<ans_t, ans_t> result;
-	std::unordered_map<std::string_view, int> struct_offsets = {
-		{"children", 0},
-		{"cats", 1},
-		{"samoyeds", 2},
-		{"pomeranians", 3},
-		{"akitas", 4},
-		{"vizslas", 5},
-		{"goldfish", 6},
-		{"trees", 7},
-		{"cars", 8},
-		{"perfumes", 9},
+	std::unordered_map<std::string_view, int d16::aunt_sue_t::*> struct_offsets = {
+		{"children", &aunt_sue_t::children},
+		{"cats", &aunt_sue_t::cats},
+		{"samoyeds", &aunt_sue_t::samoyeds},
+		{"pomeranians", &aunt_sue_t::pomeranians},
+		{"akitas", &aunt_sue_t::akitas},
+		{"vizslas", &aunt_sue_t::vizslas},
+		{"goldfish", &aunt_sue_t::goldfish},
+		{"trees", &aunt_sue_t::trees},
+		{"cars", &aunt_sue_t::cars},
+		{"perfumes", &aunt_sue_t::perfumes},
 		//
 	};
 	// PART 0 + 1.
@@ -47,8 +47,7 @@ std::pair<d16::ans_t, d16::ans_t> d16::solution(const std::string_view &sv)
 		{
 			int value = string_view_to_int(parts[i + 1]);
 			parts[i].remove_suffix(1);
-			*(((int *)&active_aunt) + struct_offsets[parts[i]]) =
-				value;
+			active_aunt.*(struct_offsets[parts[i]]) = value;
 		}
 
 		// shared:
@@ -65,6 +64,9 @@ std::pair<d16::ans_t, d16::ans_t> d16::solution(const std::string_view &sv)
 				(active_aunt.cats == -1 || active_aunt.cats == 7))
 			{
 				result.first = (int)aunts.size();
+
+				if (result.second)
+					return result;
 			}
 			else if ((active_aunt.goldfish == -1 || active_aunt.goldfish < 5) &&
 					 (active_aunt.pomeranians == -1 || active_aunt.pomeranians < 3) &&
@@ -72,6 +74,8 @@ std::pair<d16::ans_t, d16::ans_t> d16::solution(const std::string_view &sv)
 					 (active_aunt.cats == -1 || active_aunt.cats > 7))
 			{
 				result.second = (int)aunts.size();
+				if (result.first)
+					return result;
 			}
 		}
 	}
