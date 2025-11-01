@@ -18,6 +18,40 @@ bool d19::run()
 	return true;
 }
 
+static int minimal_steps_by_formula(std::string_view mol)
+{
+	int tokens = 0;
+	int rn = 0, ar = 0, y = 0;
+	for (size_t i = 0; i < mol.size();)
+	{
+		char c = mol[i];
+		if ((unsigned char)c >= 'A' && (unsigned char)c <= 'Z')
+		{
+			++tokens;
+			if (i + 1 < mol.size() && (unsigned char)mol[i + 1] >= 'a' && (unsigned char)mol[i + 1] <= 'z')
+			{
+				// two-letter token
+				if (mol[i] == 'R' && mol[i + 1] == 'n')
+					++rn;
+				else if (mol[i] == 'A' && mol[i + 1] == 'r')
+					++ar;
+				i += 2;
+				continue;
+			}
+			// single-letter token
+			if (mol[i] == 'Y')
+				++y;
+			i += 1;
+		}
+		else
+		{
+			// defensive: skip unexpected chars
+			++i;
+		}
+	}
+	return tokens - rn - ar - 2 * y - 1;
+}
+
 std::pair<d19::ans_t, d19::ans_t> d19::solution(const std::string_view &sv)
 {
 	std::pair<ans_t, ans_t> result = {0, INT_MAX};
@@ -100,6 +134,8 @@ std::pair<d19::ans_t, d19::ans_t> d19::solution(const std::string_view &sv)
 		return false;
 	};
 
+	// STUDY THIS SOLUTION:
+	auto ans = minimal_steps_by_formula(*transform_target);
 	dfs(*transform_target, 0);
 
 	return result;

@@ -44,6 +44,7 @@
 #include <vector>
 #include <variant>
 #include <regex>
+#include <mutex>
 
 #ifdef _WIN32
 #include <windows.h>

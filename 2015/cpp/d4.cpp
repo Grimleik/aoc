@@ -24,7 +24,7 @@ struct shared_state_t
 int md5_zeros_hash_mt(const std::string_view sv, const std::function<bool(const unsigned char *)> &predicate)
 {
 	shared_state_t shared_state(sv, predicate);
-	parallelize_function(std::thread::hardware_concurrency(), [](shared_state_t *ss)
+	parallelize_function(std::thread::hardware_concurrency(), [](size_t thd_id, shared_state_t *ss)
 						 {
 			std::string input;
 			input.reserve(ss->sv.size() + 32);
