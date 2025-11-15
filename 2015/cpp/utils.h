@@ -257,7 +257,7 @@ inline std::vector<std::string_view> string_view_split(const std::string_view &s
 inline int string_view_to_int(const std::string_view &sv)
 {
 	int result = 0;
-#if VERBOSE
+#ifdef VERBOSE
 	auto [ptr, ec] = std::from_chars(sv.data(), sv.data() + sv.size(), result);
 	assert(ptr);
 #else
