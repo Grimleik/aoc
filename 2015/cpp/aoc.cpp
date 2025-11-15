@@ -25,6 +25,11 @@
 #include "d18.h"
 #include "d19.h"
 #include "d20.h"
+#include "d21.h"
+#include "d22.h"
+#include "d23.h"
+#include "d24.h"
+#include "d25.h"
 
 // clang-format off
 static std::unique_ptr<aoc_day> factory(int i) {
@@ -50,6 +55,11 @@ static std::unique_ptr<aoc_day> factory(int i) {
 		case 18: return std::make_unique<d18>();
 		case 19: return std::make_unique<d19>();
 		case 20: return std::make_unique<d20>();
+		case 21: return std::make_unique<d21>();
+		case 22: return std::make_unique<d22>();
+		case 23: return std::make_unique<d23>();
+		case 24: return std::make_unique<d24>();
+		case 25: return std::make_unique<d25>();
 		default: assert(false && "Day not implemented.");
 	}
 	return nullptr;
