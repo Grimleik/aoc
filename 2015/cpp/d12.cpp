@@ -180,7 +180,7 @@ JSON *parse(std::queue<JSONToken> &tokens)
 
 d12::d12()
 {
-	input_file = std::move(read_entire_file("../../../../2015/input/d12.in"));
+	input_file = std::move(read_entire_file("d12.in"));
 	input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(119433, 68466)));
 }
 
@@ -196,10 +196,10 @@ int d12::solution(const std::string_view &sv, const std::string &filter)
 bool d12::run()
 {
 	for (auto &t : input)
-		CHECK_TEST(solution, t.first, t.second.first, "");
+		CHECK_VALUE(solution(t.first, ""), t.second.first);
 
 	for (auto &t : input)
-		CHECK_TEST(solution, t.first, t.second.second, "red");
+		CHECK_VALUE(solution(t.first, "red"), t.second.second);
 	return true;
 }
 

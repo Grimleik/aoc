@@ -39,17 +39,17 @@ int get_basement(const std::string_view floor)
 
 d1::d1()
 {
-	input_file = read_entire_file("../../../../2015/input/d1.in");
+	input_file = read_entire_file("d1.in");
 	input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(138, 1771)));
 }
 
 bool d1::run()
 {
 	for (auto &el : input)
-		CHECK_TEST(get_floor, el.first, el.second.first);
+		CHECK_VALUE(get_floor(el.first), el.second.first);
 
 	for (auto &el : input)
-		CHECK_TEST(get_basement, el.first, el.second.second);
+		CHECK_VALUE(get_basement(el.first), el.second.second);
 
 	return true;
 }

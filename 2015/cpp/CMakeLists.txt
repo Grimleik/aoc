@@ -2,7 +2,12 @@ cmake_minimum_required(VERSION 3.10.0)
 project(aoc VERSION 0.1.0 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 20)
 find_package(OpenSSL REQUIRED)
-file(GLOB DAY_SOURCES "d*.cpp")
+
+if(CMAKE_CONFIGURATION_TYPES)
+    set(RUNTIME_OUT_DIR "${CMAKE_BINARY_DIR}/bin/$<CONFIG>")
+else()
+    set(RUNTIME_OUT_DIR "${CMAKE_BINARY_DIR}/bin")
+endif()
 # add_executable(aoc main.cpp aoc.cpp ${DAY_SOURCES} ...)
 # Add executable and enable precompiled headers
 add_executable(aoc main.cpp aoc.cpp
@@ -15,4 +20,15 @@ add_executable(aoc main.cpp aoc.cpp
 target_precompile_headers(aoc PRIVATE pch.h)
 target_link_libraries(aoc PRIVATE OpenSSL::Crypto)
 
+set_target_properties(aoc PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${RUNTIME_OUT_DIR}"
+)
 
+set(SOURCE_DATA_DIR "${CMAKE_SOURCE_DIR}/input")
+set(GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
+file(MAKE_DIRECTORY "${GENERATED_DIR}")
+
+# configure into GENERATED_DIR (input from this CMakeLists folder)
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/data_dir.h.in" "${GENERATED_DIR}/data_dir.h" @ONLY)
+
+target_include_directories(aoc PRIVATE "${GENERATED_DIR}")

@@ -8,7 +8,7 @@
 ========================================================================*/
 #include "d3.h"
 
-int d3::house_delivery(const std::string_view path)
+int d3::house_delivery(const std::string_view path, const int nrActors)
 {
 	int actorId = 0;
 	std::vector<std::pair<i32, i32>> actorLocations(nrActors);
@@ -52,19 +52,17 @@ int d3::house_delivery(const std::string_view path)
 
 d3::d3()
 {
-	input_file = std::move(read_entire_file("../../../../2015/input/d3.in"));
+	input_file = std::move(read_entire_file("d3.in"));
 	input.emplace_back(std::string_view(input_file->mem, input_file->sz), std::make_pair(2592, 2360));
 }
 
 bool d3::run()
 {
-	nrActors = 1;
 	for (auto &t : input)
-		CHECK_TEST(house_delivery, t.first, t.second.first);
+		CHECK_VALUE(house_delivery(t.first, 1), t.second.first);
 
-	nrActors = 2;
 	for (auto &t : input)
-		CHECK_TEST(house_delivery, t.first, t.second.second);
+		CHECK_VALUE(house_delivery(t.first, 2), t.second.second);
 
 	return true;
 }

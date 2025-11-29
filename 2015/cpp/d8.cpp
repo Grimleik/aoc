@@ -7,7 +7,7 @@
 
 d8::d8()
 {
-	input_file = read_entire_file("../../../../2015/input/d8.in");
+	input_file = read_entire_file("d8.in");
 	input.emplace_back(std::string_view(input_file->mem, input_file->sz), std::make_pair(1350, 2085));
 }
 

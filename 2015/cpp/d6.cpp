@@ -74,7 +74,7 @@ int d6::solution(const std::string_view &sv, const std::function<int(const std::
 
 d6::d6()
 {
-	input_file = read_entire_file("../../../../2015/input/d6.in");
+	input_file = read_entire_file("d6.in");
 	input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(400410, 15343601)));
 }
 
@@ -211,10 +211,10 @@ bool d6::run()
 	};
 
 	for (auto &t : input)
-		CHECK_TEST(solution, t.first, t.second.first, p1);
+		CHECK_VALUE(solution(t.first, p1), t.second.first);
 
 	for (auto &t : input)
-		CHECK_TEST(solution, t.first, t.second.second, p2);
+		CHECK_VALUE(solution(t.first, p2), t.second.second);
 
 	return true;
 }

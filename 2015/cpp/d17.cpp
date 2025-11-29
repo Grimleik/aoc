@@ -5,7 +5,7 @@
 
 d17::d17()
 {
-	input_file = read_entire_file("../../../../2015/input/d17.in");
+	input_file = read_entire_file("d17.in");
 	input.emplace_back(std::make_pair(std::string_view(input_file->mem),
 									  std::make_pair(1638, 17)));
 }

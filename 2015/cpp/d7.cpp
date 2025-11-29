@@ -485,7 +485,7 @@ std::pair<int, int> d7::solution(const std::string_view &sv, const char *reg_nam
 
 d7::d7()
 {
-	input_file = read_entire_file("../../../../2015/input/d7.in");
+	input_file = read_entire_file("d7.in");
 	input.push_back(std::make_pair(input_t{std::string_view(input_file->mem), "a", "b"}, std::make_pair(16076, 2797)));
 }
 

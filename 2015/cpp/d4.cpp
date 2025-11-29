@@ -86,19 +86,21 @@ int md5_zeros_hash_st(const std::string_view sv, const std::function<bool(const 
 
 d4::d4()
 {
-	input_file = read_entire_file("../../../../2015/input/d4.in");
+	input_file = read_entire_file("d4.in");
 	input.push_back(std::make_pair(std::string_view(input_file->mem, input_file->sz), std::make_pair(346386, 9958218)));
 }
 
 bool d4::run()
 {
 	for (auto &el : input)
-		CHECK_TEST(md5_zeros_hash_mt, el.first, el.second.first, [](const unsigned char *md)
-				   { return ((unsigned int)md[0] == 0 && (unsigned int)md[1] == 0 && ((unsigned int)md[2] >> 4) == 0); });
+		CHECK_VALUE(md5_zeros_hash_mt(el.first, [](const unsigned char *md)
+									  { return ((unsigned int)md[0] == 0 && (unsigned int)md[1] == 0 && ((unsigned int)md[2] >> 4) == 0); }),
+					el.second.first);
 
 	for (auto &el : input)
-		CHECK_TEST(md5_zeros_hash_mt, el.first, el.second.second, [](const unsigned char *md)
-				   { return ((unsigned int)md[0] == 0 && (unsigned int)md[1] == 0 && ((unsigned int)md[2]) == 0); });
+		CHECK_VALUE(md5_zeros_hash_mt(el.first, [](const unsigned char *md)
+									  { return ((unsigned int)md[0] == 0 && (unsigned int)md[1] == 0 && ((unsigned int)md[2]) == 0); }),
+					el.second.second);
 
 	return true;
 }

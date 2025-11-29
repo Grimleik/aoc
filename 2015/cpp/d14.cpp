@@ -5,11 +5,11 @@
 
 d14::d14()
 {
-	input_file = read_entire_file("../../../../2015/input/d14.in");
+	input_file = read_entire_file("d14.in");
 	input.emplace_back(std::make_pair(std::string_view(input_file->mem),
 									  std::make_pair(2660, 1256)));
 
-	// input_file = read_entire_file("../../../../2015/input/d14_test.in");
+	// input_file = read_entire_file(d14_test.in");
 	// input.emplace_back(std::make_pair(std::string_view(input_file->mem),
 	// 								  std::make_pair(1120, 689)));
 }

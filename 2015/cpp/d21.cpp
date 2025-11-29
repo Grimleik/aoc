@@ -45,7 +45,7 @@ std::unordered_map<item_type, std::vector<item_t>> items;
 
 d21::d21()
 {
-	auto armory = read_entire_file("../../../../2015/input/d21_armory.in");
+	auto armory = read_entire_file("d21_armory.in");
 	auto lines = string_view_split(std::string_view(armory->mem));
 	int it = 0, idx = 0;
 	for (int i = 1; i < lines.size(); ++i)
@@ -74,7 +74,7 @@ d21::d21()
 				  });
 	}
 
-	input_file = read_entire_file("../../../../2015/input/d21.in");
+	input_file = read_entire_file("d21.in");
 	input.emplace_back(std::make_pair(std::string_view(input_file->mem),
 									  std::make_pair(111, 188)));
 }

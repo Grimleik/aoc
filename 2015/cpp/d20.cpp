@@ -5,7 +5,7 @@
 
 d20::d20()
 {
-	input_file = read_entire_file("../../../../2015/input/d20.in");
+	input_file = read_entire_file("d20.in");
 	input.emplace_back(std::make_pair(std::string_view(input_file->mem),
 									  std::make_pair(786240, 831600)));
 }

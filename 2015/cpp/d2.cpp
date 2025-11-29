@@ -82,17 +82,17 @@ size_t solution(const std::string_view &sv, std::function<size_t(box &)> calc)
 
 d2::d2()
 {
-	input_file = read_entire_file("../../../../2015/input/d2.in");
+	input_file = read_entire_file("d2.in");
 	input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(1586300, 3737498)));
 }
 
 bool d2::run()
 {
 	for (auto &el : input)
-		CHECK_TEST(solution, el.first, el.second.first, total_area_rectangular_prism);
+		CHECK_VALUE(solution(el.first, total_area_rectangular_prism), el.second.first);
 
 	for (auto &el : input)
-		CHECK_TEST(solution, el.first, el.second.second, total_bow_rectangular_prism);
+		CHECK_VALUE(solution(el.first, total_bow_rectangular_prism), el.second.second);
 
 	return true;
 }

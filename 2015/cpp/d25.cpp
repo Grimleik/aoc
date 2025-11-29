@@ -6,7 +6,7 @@
 
 d25::d25()
 {
-	input_file = read_entire_file("../../../../2015/input/d25.in");
+	input_file = read_entire_file("d25.in");
 	input.emplace_back(std::make_pair(std::string_view(input_file->mem),
 									  std::make_pair(0, 0)));
 }

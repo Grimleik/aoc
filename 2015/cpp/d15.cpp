@@ -12,11 +12,11 @@
 #include "d15.h"
 d15::d15()
 {
-	input_file = read_entire_file("../../../../2015/input/d15.in");
+	input_file = read_entire_file("d15.in");
 	input.emplace_back(std::make_pair(std::string_view(input_file->mem),
 									  std::make_pair(13882464, 11171160)));
 
-	// input_file = read_entire_file("../../../../2015/input/d15_test.in");
+	// input_file = read_entire_file(d15_test.in");
 	// input.emplace_back(std::make_pair(std::string_view(input_file->mem),
 	// 								  std::make_pair(0, 0)));
 }

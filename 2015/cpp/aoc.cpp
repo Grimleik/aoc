@@ -5,6 +5,7 @@
 	of the memory usage.
 ========================================================================*/
 #include "aoc.h"
+#include <float.h>
 #include "d1.h"
 #include "d2.h"
 #include "d3.h"

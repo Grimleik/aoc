@@ -26,7 +26,7 @@
 
 d9::d9()
 {
-	input_file = read_entire_file("../../../../2015/input/d9.in");
+	input_file = read_entire_file("d9.in");
 	input.emplace_back(std::string_view(input_file->mem, input_file->sz), std::make_pair(207, 804));
 }
 

@@ -6,7 +6,7 @@
 
 d24::d24()
 {
-	input_file = read_entire_file("../../../../2015/input/d24.in");
+	input_file = read_entire_file("d24.in");
 	input.emplace_back(std::make_pair(std::string_view(input_file->mem),
 									  std::make_pair(0, 0)));
 }

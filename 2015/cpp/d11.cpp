@@ -86,7 +86,7 @@ static std::string solver(const std::string_view &sv)
 
 d11::d11()
 {
-	input_file = read_entire_file("../../../../2015/input/d11.in");
+	input_file = read_entire_file("d11.in");
 	input.emplace_back(std::string_view(input_file->mem, input_file->sz), std::make_pair("cqjxxyzz", "cqkaabcc"));
 }
 

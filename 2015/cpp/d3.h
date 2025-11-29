@@ -20,8 +20,7 @@ protected:
 
 private:
 	std::unique_ptr<file_contents> input_file;
-	int house_delivery(const std::string_view path);
-	int nrActors = {1};
+	int house_delivery(const std::string_view path, const int nrActors);
 	std::string benchmark_string = "";
 
 	std::vector<std::pair<std::string_view, std::pair<int, int>>> input = {

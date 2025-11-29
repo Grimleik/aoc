@@ -71,7 +71,7 @@ bool d5_strings_p2(const std::string_view &sv)
 
 d5::d5()
 {
-	input_file = std::move(read_entire_file("../../../../2015/input/d5.in"));
+	input_file = std::move(read_entire_file("d5.in"));
 	input = string_view_split(std::string_view(input_file->mem, input_file->sz), '\n');
 }
 

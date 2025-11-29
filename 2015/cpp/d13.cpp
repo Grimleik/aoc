@@ -24,10 +24,10 @@
 
 d13::d13()
 {
-	input_file = read_entire_file("../../../../2015/input/d13.in");
+	input_file = read_entire_file("d13.in");
 	input.emplace_back(std::make_pair(std::string_view(input_file->mem),
 									  std::make_pair(664, 640)));
-	// input_file = read_entire_file("../../../../2015/input/d13_test.in");
+	// input_file = read_entire_file(d13_test.in");
 	// input.emplace_back(std::make_pair(std::string_view(input_file->mem),
 	// 								  std::make_pair(330, 286)));
 }

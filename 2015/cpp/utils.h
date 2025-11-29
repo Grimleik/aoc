@@ -7,6 +7,8 @@
 #include "pch.h"
 // #define VERBOSE
 
+namespace fs = std::filesystem;
+
 typedef uint8_t u8;
 typedef int32_t i32;
 typedef int64_t i64;
@@ -27,31 +29,8 @@ typedef double f64;
 		}                                                                      \
 	} while (false);
 
-#ifdef VERBOSE
-#define CHECK_TEST(func, input, output, ...)                                                                  \
-	{                                                                                                         \
-		auto check_output = func(input, __VA_ARGS__);                                                         \
-		if (check_output != output)                                                                           \
-		{                                                                                                     \
-			std::cout << std::format("\tFAILED. Input({}) != Output({})", check_output, output) << std::endl; \
-			return false;                                                                                     \
-		}                                                                                                     \
-		else                                                                                                  \
-		{                                                                                                     \
-			std::cout << std::format("\tPASSED. Input({}) == Output({})", check_output, output) << std::endl; \
-		}                                                                                                     \
-	}
-#else
-#define CHECK_TEST(func, input, output, ...)                                                                  \
-	{                                                                                                         \
-		auto check_output = func(input, __VA_ARGS__);                                                         \
-		if (check_output != output)                                                                           \
-		{                                                                                                     \
-			std::cout << std::format("\tFAILED. Input({}) != Output({})", check_output, output) << std::endl; \
-			return false;                                                                                     \
-		}                                                                                                     \
-	}
-#endif
+#include <filesystem>
+#include "data_dir.h"
 
 struct file_contents
 {
@@ -60,10 +39,12 @@ struct file_contents
 	size_t sz;
 };
 
+extern fs::path gDataPath;
+
 inline std::unique_ptr<file_contents> read_entire_file(const char *filename)
 {
 	std::unique_ptr<file_contents> result = std::unique_ptr<file_contents>(new file_contents());
-	std::ifstream file(filename, std::ios::in | std::ios::ate);
+	std::ifstream file(gDataPath / filename, std::ios::in | std::ios::ate);
 	if (file.is_open())
 	{
 		result->sz = file.tellg();

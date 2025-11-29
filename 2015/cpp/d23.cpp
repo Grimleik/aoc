@@ -6,8 +6,8 @@
 
 d23::d23()
 {
-	// input_file = read_entire_file("../../../../2015/input/d23_test.in");
-	input_file = read_entire_file("../../../../2015/input/d23.in");
+	// input_file = read_entire_file("d23_test.in");
+	input_file = read_entire_file("d23.in");
 	input.emplace_back(std::make_pair(std::string_view(input_file->mem),
 									  std::make_pair(255, 334)));
 }
@@ -34,12 +34,12 @@ struct instruction_t
 	OP op;
 	union
 	{
-		struct UNARY
+		struct
 		{
 			int a;
 		} u;
 
-		struct BINARY
+		struct
 		{
 			int a;
 			int b;
