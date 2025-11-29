@@ -75,6 +75,43 @@ aoc::aoc(std::initializer_list<int> day_list)
 	}
 }
 
+// TODO: Better platform separation.
+
+size_t getCurrentRSS();
+
+#ifdef _WIN32
+#include <windows.h>
+#include <psapi.h>
+
+size_t getCurrentRSS()
+{
+	PROCESS_MEMORY_COUNTERS info;
+	GetProcessMemoryInfo(GetCurrentProcess(), &info, sizeof(info));
+	return (size_t)info.WorkingSetSize; // in bytes
+}
+#else
+#include <unistd.h>
+#include <cstdio>
+size_t getCurrentRSS()
+{
+	long res_page = 0;
+	FILE *f = std::fopen("/proc/self/statm", "r");
+	if (f)
+	{
+		long size;
+		if (std::fscanf(f, "%ld %ld", &size, &res_page) != 2)
+		{
+			res_page = 0;
+		}
+		std::fclose(f);
+	}
+	long page_size = sysconf(_SC_PAGESIZE);
+	if (page_size < 0)
+		page_size = 4096;
+	return (size_t)res_page * (size_t)page_size;
+}
+#endif
+
 bool aoc::check()
 {
 	double all_durations = 0.0;
@@ -103,14 +140,15 @@ void aoc::benchmark(int iterations)
 	std::cout << std::format("Benchmarking {}: days:{}\n", 2015, days.size());
 	for (auto &day : days)
 	{
+		size_t mem_before = getCurrentRSS();
 		day->pre_benchmark();
 		day->run(); // discard first run...
 		double total_duration = 0.0, max_duration = 0.0, min_duration = FLT_MAX;
 		for (int i = 0; i < iterations; ++i)
 		{
-			auto start = std::chrono::high_resolution_clock::now();
+			auto start = std::chrono::steady_clock::now();
 			day->run();
-			auto end = std::chrono::high_resolution_clock::now();
+			auto end = std::chrono::steady_clock::now();
 			auto duration = std::chrono::duration<double>(end - start).count();
 			max_duration = std::max(duration, max_duration);
 			min_duration = std::min(duration, min_duration);
@@ -120,8 +158,10 @@ void aoc::benchmark(int iterations)
 		total_duration /= iterations;
 		day->post_benchmark();
 
-		std::cout << std::format("\tDay {} Avg {}, Min {}, Max{}.\n",
-								 day->day(), total_duration, min_duration, max_duration);
+		size_t mem_after = getCurrentRSS();
+
+		std::cout << std::format("\tDay {} Avg {}, Min {}, Max{}, Memory Used {} KB.\n",
+								 day->day(), total_duration, min_duration, max_duration, (mem_after - mem_before) / 1024);
 		all_durations += total_duration;
 	}
 	std::cout << std::format("Benchmarking {} done in time: {}\n", 2015, all_durations);

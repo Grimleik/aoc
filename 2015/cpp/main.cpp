@@ -1,17 +1,9 @@
 #include "aoc.h"
 #include "utils.h"
-// #include <windows.h>
-// #include <psapi.h>
 
-// #define BENCHMARK
-// #define MEMORY_BENCHMARK
+// TODO: Better benchmarking options.
+#define BENCHMARK
 
-// size_t getCurrentRSS()
-// {
-// 	PROCESS_MEMORY_COUNTERS info;
-// 	GetProcessMemoryInfo(GetCurrentProcess(), &info, sizeof(info));
-// 	return (size_t)info.WorkingSetSize; // in bytes
-// }
 fs::path gDataPath;
 int main(int argc, char **argv)
 {
@@ -21,10 +13,6 @@ int main(int argc, char **argv)
 		std::cout << "Data path not present." << std::endl;
 		return -1;
 	}
-	// Memory benchmark, best to only use one day at a time
-#ifdef MEMORY_BENCHMARK
-	size_t mem_before = getCurrentRSS();
-#endif
 	aoc y2015({
 		// 1,
 		// 2,
@@ -55,10 +43,6 @@ int main(int argc, char **argv)
 
 #ifdef BENCHMARK
 	y2015.benchmark(100);
-#ifdef MEMORY_BENCHMARK
-	size_t mem_after = getCurrentRSS();
-	std::cout << "Memory used " << (mem_after - mem_before) / 1024 << " KB" << std::endl;
-#endif
 #else
 	y2015.check();
 #endif
