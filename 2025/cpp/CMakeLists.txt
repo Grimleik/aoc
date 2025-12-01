@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10.0)
-project(aoc VERSION 0.1.0 LANGUAGES C CXX)
+project(aoc25 VERSION 0.1.0 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 20)
 find_package(OpenSSL REQUIRED)
 
@@ -10,25 +10,25 @@ else()
 endif()
 # add_executable(aoc main.cpp aoc.cpp ${DAY_SOURCES} ...)
 # Add executable and enable precompiled headers
-add_executable(aoc main.cpp aoc.cpp
-    d1.cpp d2.cpp d3.cpp d4.cpp d5.cpp
-    d6.cpp d7.cpp d8.cpp d9.cpp d10.cpp
-    d11.cpp d12.cpp d13.cpp d14.cpp d15.cpp
-    d16.cpp d17.cpp d18.cpp d19.cpp d20.cpp
-    d21.cpp d22.cpp d23.cpp d24.cpp d25.cpp
+add_executable(aoc25 main.cpp aoc.cpp
+    d1.cpp #d2.cpp d3.cpp d4.cpp d5.cpp
+    # d6.cpp d7.cpp d8.cpp d9.cpp d10.cpp
+    # d11.cpp d12.cpp d13.cpp d14.cpp d15.cpp
+    # d16.cpp d17.cpp d18.cpp d19.cpp d20.cpp
+    # d21.cpp d22.cpp d23.cpp d24.cpp d25.cpp
 )
-target_precompile_headers(aoc PRIVATE pch.h)
-target_link_libraries(aoc PRIVATE OpenSSL::Crypto)
+target_precompile_headers(aoc25 PRIVATE pch.h)
+target_link_libraries(aoc25 PRIVATE OpenSSL::Crypto)
 
-set_target_properties(aoc PROPERTIES
+set_target_properties(aoc25 PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${RUNTIME_OUT_DIR}"
 )
 
-set(SOURCE_DATA_DIR "${CMAKE_SOURCE_DIR}/2015/input")
+set(SOURCE_DATA_DIR "${CMAKE_SOURCE_DIR}/2025/input")
 set(GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
 file(MAKE_DIRECTORY "${GENERATED_DIR}")
 
 # configure into GENERATED_DIR (input from this CMakeLists folder)
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/data_dir.h.in" "${GENERATED_DIR}/data_dir.h" @ONLY)
 
-target_include_directories(aoc PRIVATE "${GENERATED_DIR}")
+target_include_directories(aoc25 PRIVATE "${GENERATED_DIR}")

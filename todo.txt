@@ -1,2 +1,3 @@
 Continue clean up.
 Exclude vcpkg on non windows platforms. Do this when y2015 is done.
+Find a way to combine 2015/2025 common functionality.
