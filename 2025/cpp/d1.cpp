@@ -8,7 +8,7 @@
 d1::d1()
 {
 	input_file = read_entire_file("d1.in");
-	input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(1141, 0)));
+	input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(1141, 6634)));
 }
 bool d1::run()
 {
@@ -29,7 +29,7 @@ std::pair<d1::ans_t, d1::ans_t> d1::solution(const std::string_view &sv)
 		int val = string_view_to_int(s);
 		int revs = val / 100;
 		val -= revs * 100;
-		result.second += abs(revs);
+		result.second += revs;
 		if (sign == 'R')
 		{
 			if (track != 0 && (val + track) >= 100)

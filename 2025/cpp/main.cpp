@@ -2,7 +2,7 @@
 #include "utils.h"
 
 // TODO: Better benchmarking options.
-// #define BENCHMARK
+#define BENCHMARK
 
 fs::path gDataPath;
 int main(int argc, char **argv)
@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 	});
 
 #ifdef BENCHMARK
-	y2015.benchmark(100);
+	y2025.benchmark(100);
 #else
 	y2025.check();
 #endif
