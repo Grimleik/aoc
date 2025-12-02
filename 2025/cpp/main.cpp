@@ -2,7 +2,7 @@
 #include "utils.h"
 
 // TODO: Better benchmarking options.
-#define BENCHMARK
+// #define BENCHMARK
 
 fs::path gDataPath;
 int main(int argc, char **argv)
@@ -14,8 +14,8 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	aoc y2025({
-		1,
-		// 2,
+		// 1,
+		2,
 		// 3,
 		// 4,
 		// 5,
