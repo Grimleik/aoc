@@ -11,7 +11,7 @@ d2::d2()
 	// input_file = read_entire_file("d2_test.in");
 	input_file = read_entire_file("d2.in");
 	// input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(1227775554, 4174379265)));
-	input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(23039913998, 0)));
+	input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(23039913998, 35950619148)));
 }
 bool d2::run()
 {

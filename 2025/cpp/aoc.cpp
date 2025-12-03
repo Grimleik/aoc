@@ -8,7 +8,7 @@
 #include <float.h>
 #include "d1.h"
 #include "d2.h"
-// #include "d3.h"
+#include "d3.h"
 // #include "d4.h"
 // #include "d5.h"
 // #include "d6.h"
@@ -25,7 +25,7 @@ static std::unique_ptr<aoc_day> factory(int i) {
 	{
 		case 1: return std::make_unique<d1>();
 		case 2: return std::make_unique<d2>();
-		// case 3: return std::make_unique<d3>();
+		case 3: return std::make_unique<d3>();
 		// case 4: return std::make_unique<d4>();
 		// case 5: return std::make_unique<d5>();
 		// case 6: return std::make_unique<d6>();
@@ -134,8 +134,8 @@ void aoc::benchmark(int iterations)
 
 		size_t mem_after = getCurrentRSS();
 
-		std::cout << std::format("\tDay {} Avg {}, Min {}, Max{}, Memory Used {} KB.\n",
-								 day->day(), total_duration, min_duration, max_duration, (mem_after - mem_before) / 1024);
+		std::cout << std::format("\tDay {} Avg {} (in ms {}), Min {}, Max{}, Memory Used {} KB.\n",
+								 day->day(), total_duration, total_duration * 1000, min_duration, max_duration, (mem_after - mem_before) / 1024);
 		all_durations += total_duration;
 	}
 	std::cout << std::format("Benchmarking {} done in time: {}\n", 2015, all_durations);
