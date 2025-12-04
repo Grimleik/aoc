@@ -9,7 +9,7 @@
 #include "d1.h"
 #include "d2.h"
 #include "d3.h"
-// #include "d4.h"
+#include "d4.h"
 // #include "d5.h"
 // #include "d6.h"
 // #include "d7.h"
@@ -26,7 +26,7 @@ static std::unique_ptr<aoc_day> factory(int i) {
 		case 1: return std::make_unique<d1>();
 		case 2: return std::make_unique<d2>();
 		case 3: return std::make_unique<d3>();
-		// case 4: return std::make_unique<d4>();
+		case 4: return std::make_unique<d4>();
 		// case 5: return std::make_unique<d5>();
 		// case 6: return std::make_unique<d6>();
 		// case 7: return std::make_unique<d7>();

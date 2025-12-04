@@ -11,7 +11,7 @@ endif()
 # add_executable(aoc main.cpp aoc.cpp ${DAY_SOURCES} ...)
 # Add executable and enable precompiled headers
 add_executable(aoc25 main.cpp aoc.cpp
-    d1.cpp d2.cpp d3.cpp #d4.cpp d5.cpp
+    d1.cpp d2.cpp d3.cpp d4.cpp #d5.cpp
     # d6.cpp d7.cpp d8.cpp d9.cpp d10.cpp
     # d11.cpp d12.cpp d13.cpp d14.cpp d15.cpp
     # d16.cpp d17.cpp d18.cpp d19.cpp d20.cpp
