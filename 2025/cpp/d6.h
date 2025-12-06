@@ -1,19 +1,13 @@
-
-#if !defined(D2_H)
-/*========================================================================
-	Creator: Grimleik $
-========================================================================*/
-#define D2_H
 #include "utils.h"
 #include "aoc_day.h"
 
-class d2 : public aoc_day
+class d6 : public aoc_day
 {
 public:
-	d2();
+	d6();
 	bool run() override;
 
-	constexpr int day() override { return 2; }
+	constexpr int day() override { return 6; }
 
 protected:
 	void pre_benchmark() override {}
@@ -27,4 +21,3 @@ private:
 		//
 	};
 };
-#endif

@@ -8,10 +8,10 @@
 
 d3::d3()
 {
-	// input_file = read_entire_file("d3_test.in");
-	// input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(357, 3121910778619)));
-	input_file = read_entire_file("d3.in");
-	input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(17432, 173065202451341)));
+	input_file = read_entire_file("d3_test.in");
+	input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(357, 3121910778619)));
+	// input_file = read_entire_file("d3.in");
+	// input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(17432, 173065202451341)));
 }
 bool d3::run()
 {

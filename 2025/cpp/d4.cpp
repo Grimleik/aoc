@@ -11,7 +11,7 @@ d4::d4()
 	// input_file = read_entire_file("d4_test.in");
 	// input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(13, 43)));
 	input_file = read_entire_file("d4.in");
-	input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(1424, 0)));
+	input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(1424, 8727)));
 }
 bool d4::run()
 {
@@ -35,7 +35,7 @@ std::pair<d4::ans_t, d4::ans_t> d4::solution(const std::string_view &sv)
 	w = map.back().size();
 	h = map.size();
 
-	std::cout << w << ", " << h << std::endl;
+	// std::cout << w << ", " << h << std::endl;
 
 	int removal = 0;
 	do
