@@ -2,7 +2,7 @@
 #include "utils.h"
 
 // TODO: Better benchmarking options.
-// #define BENCHMARK
+#define BENCHMARK
 
 fs::path gDataPath;
 int main(int argc, char **argv)
