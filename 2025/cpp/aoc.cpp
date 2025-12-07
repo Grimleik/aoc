@@ -12,12 +12,12 @@
 #include "d4.h"
 #include "d5.h"
 #include "d6.h"
-// #include "d7.h"
-// #include "d8.h"
-// #include "d9.h"
-// #include "d10.h"
-// #include "d11.h"
-// #include "d12.h"
+#include "d7.h"
+#include "d8.h"
+#include "d9.h"
+#include "d10.h"
+#include "d11.h"
+#include "d12.h"
 
 // clang-format off
 static std::unique_ptr<aoc_day> factory(int i) {
@@ -29,12 +29,12 @@ static std::unique_ptr<aoc_day> factory(int i) {
 		case 4: return std::make_unique<d4>();
 		case 5: return std::make_unique<d5>();
 		case 6: return std::make_unique<d6>();
-		// case 7: return std::make_unique<d7>();
-		// case 8: return std::make_unique<d8>();
-		// case 9: return std::make_unique<d9>();
-		// case 10: return std::make_unique<d10>();
-		// case 11: return std::make_unique<d11>();
-		// case 12: return std::make_unique<d12>();
+		case 7: return std::make_unique<d7>();
+		case 8: return std::make_unique<d8>();
+		case 9: return std::make_unique<d9>();
+		case 10: return std::make_unique<d10>();
+		case 11: return std::make_unique<d11>();
+		case 12: return std::make_unique<d12>();
 		default: assert(false && "Day not implemented.");
 	}
 	return nullptr;
@@ -111,10 +111,9 @@ bool aoc::check()
 void aoc::benchmark(int iterations)
 {
 	double all_durations = 0.0;
-	std::cout << std::format("Benchmarking {}: days:{}\n", 2015, days.size());
+	std::cout << std::format("Benchmarking {}: days:{}\n", 2025, days.size());
 	for (auto &day : days)
 	{
-		size_t mem_before = getCurrentRSS();
 		day->pre_benchmark();
 		day->run(); // discard first run...
 		double total_duration = 0.0, max_duration = 0.0, min_duration = FLT_MAX;
@@ -132,11 +131,9 @@ void aoc::benchmark(int iterations)
 		total_duration /= iterations;
 		day->post_benchmark();
 
-		size_t mem_after = getCurrentRSS();
-
-		std::cout << std::format("\tDay {} Avg {} (in ms {}), Min {}, Max{}, Memory Used {} KB.\n",
-								 day->day(), total_duration, total_duration * 1000, min_duration, max_duration, (mem_after - mem_before) / 1024);
+		std::cout << std::format("\tDay {} Avg {} (in ms {}), Min {}, Max {}.\n",
+								 day->day(), total_duration, total_duration * 1000, min_duration, max_duration);
 		all_durations += total_duration;
 	}
-	std::cout << std::format("Benchmarking {} done in time: {}\n", 2015, all_durations);
+	std::cout << std::format("Benchmarking {} done in time: {}\n", 2025, all_durations);
 }

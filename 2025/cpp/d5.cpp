@@ -9,7 +9,7 @@ d5::d5()
 	// input_file = read_entire_file("d5_test.in");
 	// input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(3, 14)));
 	input_file = read_entire_file("d5.in");
-	input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(868, 354143734113772)));
+	input.push_back(std::make_pair(std::string_view(input_file->mem, input_file->sz), std::make_pair(868, 354143734113772)));
 }
 bool d5::run()
 {
@@ -53,9 +53,10 @@ std::pair<d5::ans_t, d5::ans_t> d5::solution(const std::string_view &sv)
 		result.second += (r.max - r.min) + 1;
 	}
 	idx++;
-	while (!splits[idx].empty())
+	while (!splits[idx].empty() && idx < splits.size())
+	// while (!splits[idx].empty() && idx < splits.size())
 	{
-		ans_t id = string_view_to_int(splits[idx++]);
+		ans_t id = string_view_to_int(splits[idx]);
 		for (auto r : ranges)
 		{
 			if (id >= r.min && id <= r.max)
@@ -64,6 +65,7 @@ std::pair<d5::ans_t, d5::ans_t> d5::solution(const std::string_view &sv)
 				break;
 			}
 		}
+		idx++;
 	}
 	return result;
 }

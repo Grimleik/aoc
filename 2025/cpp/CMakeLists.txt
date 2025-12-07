@@ -12,8 +12,8 @@ endif()
 # Add executable and enable precompiled headers
 add_executable(aoc25 main.cpp aoc.cpp
     d1.cpp d2.cpp d3.cpp d4.cpp d5.cpp
-    d6.cpp #d7.cpp d8.cpp d9.cpp d10.cpp
-    # d11.cpp d12.cpp
+    d6.cpp d7.cpp d8.cpp d9.cpp d10.cpp
+    d11.cpp d12.cpp
 )
 target_precompile_headers(aoc25 PRIVATE pch.h)
 target_link_libraries(aoc25 PRIVATE OpenSSL::Crypto)
