@@ -2,7 +2,7 @@
 #include "utils.h"
 
 // TODO: Better benchmarking options.
-#define BENCHMARK
+// #define BENCHMARK
 
 fs::path gDataPath;
 int main(int argc, char **argv)
@@ -20,10 +20,10 @@ int main(int argc, char **argv)
 		// 4,
 		// 5,
 		// 6,
-		7,
+		// 7,
 		// 8,
 		// 9,
-		// 10,
+		10,
 		// 11,
 		// 12,
 		//

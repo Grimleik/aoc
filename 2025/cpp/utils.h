@@ -265,4 +265,51 @@ inline void render(const std::string &out)
 	fflush(stdout);
 }
 
+#include <chrono>
+#include <iostream>
+#include <string_view>
+
+#define TIMEBLOCK_STR_HELPER(x) #x
+#define TIMEBLOCK_STR(x) TIMEBLOCK_STR_HELPER(x)
+#define TIMEBLOCK_CONCAT2(a, b) a##b
+#define TIMEBLOCK_UNIQUE_NAME(base, line) TIMEBLOCK_CONCAT2(base, line)
+#ifdef _TIME
+
+namespace timeblock
+{
+	struct Scoped
+	{
+		std::string_view name;
+		std::chrono::steady_clock::time_point t;
+		explicit Scoped(std::string_view n) : name(n), t(std::chrono::steady_clock::now()) {}
+		~Scoped()
+		{
+			double s = std::chrono::duration<double>(std::chrono::steady_clock::now() - t).count();
+			std::cout << name << " took " << s << " s\n";
+		}
+	};
+} // namespace timeblock
+
+// TIME_BLOCK: auto-generated label from file:line
+#define TIME_BLOCK(block)                                                                                                \
+	do                                                                                                                   \
+	{                                                                                                                    \
+		timeblock::Scoped TIMEBLOCK_UNIQUE_NAME(_tb_, __LINE__)(std::string_view(__FILE__ ":" TIMEBLOCK_STR(__LINE__))); \
+		block                                                                                                            \
+	} while (0)
+
+// TIME_BLOCK_NAMED: specify label explicitly
+#define TIME_BLOCK_NAMED(name, block)                                  \
+	do                                                                 \
+	{                                                                  \
+		timeblock::Scoped TIMEBLOCK_UNIQUE_NAME(_tb_, __LINE__)(name); \
+		block                                                          \
+	} while (0)
+
+#else // _TIME not defined
+
+#define TIME_BLOCK(block) block
+#define TIME_BLOCK_NAMED(name, block) block
+
+#endif // _TIME
 #endif
