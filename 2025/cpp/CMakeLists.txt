@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10.0)
 project(aoc25 VERSION 0.1.0 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 20)
-find_package(OpenSSL REQUIRED)
+# find_package(OpenSSL REQUIRED)
 
 if(CMAKE_CONFIGURATION_TYPES)
     set(RUNTIME_OUT_DIR "${CMAKE_BINARY_DIR}/bin/$<CONFIG>")
@@ -16,7 +16,7 @@ add_executable(aoc25 main.cpp aoc.cpp
     d11.cpp d12.cpp
 )
 target_precompile_headers(aoc25 PRIVATE pch.h)
-target_link_libraries(aoc25 PRIVATE OpenSSL::Crypto)
+# target_link_libraries(aoc25 PRIVATE OpenSSL::Crypto)
 
 set_target_properties(aoc25 PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${RUNTIME_OUT_DIR}"

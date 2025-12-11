@@ -10,9 +10,9 @@
 d10::d10()
 {
 	input_file = read_entire_file("d10_test.in");
-	input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(0, 0)));
+	input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(7, 0)));
 	// input_file = read_entire_file("d10.in");
-	// input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(23039913998, 35950619148)));
+	// input.push_back(std::make_pair(std::string_view(input_file->mem), std::make_pair(0, 0)));
 }
 bool d10::run()
 {
@@ -69,5 +69,61 @@ std::pair<d10::ans_t, d10::ans_t> d10::solution(const std::string_view &sv)
 			}
 		}
 	}
+
+	std::vector<bool> states;
+	std::function<void(machine_t, int, int &)> dfs =
+		[&](machine_t m, int presses, int &out)
+	{
+		// Too many presses ? out.
+		if (presses > out)
+			return;
+
+		// All lights off ? done.
+		bool done = true;
+		for (auto l : m.lights)
+			if (!l)
+			{
+				done = false;
+				break;
+			}
+		// check if better press.
+		if (done)
+		{
+			out = std::min(out, presses);
+			return;
+		}
+
+		// ... otherwise we try to find a button that turns of one of our lights.
+		int idx = 0;
+		for (auto &bts : m.buttons)
+		{
+			bool press = false;
+			for (auto &b : bts)
+			{
+				if (m.lights[b])
+				{
+					press = true;
+					break;
+				}
+			}
+			if (press)
+			{
+				previous_presses.push_back(idx);
+				for (auto &b : bts)
+					m.lights[b] = !m.lights[b];
+				dfs(m, presses + 1, out);
+			}
+			idx++;
+		}
+	};
+
+	for (auto &m : machines)
+	{
+		int out = INT_MAX;
+		dfs(m, 0, out);
+		previous_presses.clear();
+		result.first += out;
+	}
+	// Idea is to try and put out all lights by bfs
 	return result;
 }
